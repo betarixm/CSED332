@@ -1,5 +1,7 @@
 package edu.postech.csed332.homework1;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -9,10 +11,8 @@ import java.util.Map;
  * has 100001, etc. There are also functions for finding specific accounts.
  */
 public class Bank {
-
-    // TODO: add more fields to implement this class
-    // (hint: use Java Collection Framework, including List, Map, Set, etc.)
-
+    int BOUND = 100000;
+    ArrayList<Account> accounts = new ArrayList<>();
     /**
      * Create a bank. Initially, there is no account.
      */
@@ -27,7 +27,12 @@ public class Bank {
      * @return the account with number accNum; null if no such account exists
      */
     Account findAccount(int accNum) {
-        // TODO implement this
+        for (Account acc : accounts) {
+            if (acc.getAccountNumber() == accNum) {
+                return acc;
+            }
+        }
+
         return null;
     }
 
@@ -38,8 +43,11 @@ public class Bank {
      * @return a list of accounts sorted in ascending order by account number
      */
     List<Account> findAccountByName(String name) {
-        // TODO implement this
-        return null;
+        List<Account> filtered = accounts.stream()
+                .filter(a -> a.getOwner().equals(name))
+                .sorted(Comparator.comparing(Account::getAccountNumber)).toList();
+
+        return (filtered.size() == 0) ? null : filtered;
     }
 
     /**
@@ -51,8 +59,17 @@ public class Bank {
      * @return the newly created account; null if not possible
      */
     Account createAccount(String name, ACCTYPE accType, double initial) {
-        // TODO implement this
-        return null;
+        if(accType == ACCTYPE.HIGH && initial < 1000) {
+            return null;
+        }
+
+        Account acc = (accType == ACCTYPE.HIGH)
+                ? (new HighInterestAccount(accounts.size() + BOUND, name, initial))
+                : (new LowInterestAccount(accounts.size() + BOUND, name, initial));
+
+        accounts.add(acc);
+
+        return acc;
     }
 
     /**
@@ -64,6 +81,7 @@ public class Bank {
      * @throws IllegalOperationException if not possible
      */
     void transfer(Account src, Account dst, double amount) throws IllegalOperationException {
-        // TODO implement this
+        src.withdraw(amount);
+        dst.deposit(amount);
     }
 }
