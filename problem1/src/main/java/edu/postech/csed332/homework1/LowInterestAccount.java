@@ -6,32 +6,42 @@ package edu.postech.csed332.homework1;
  * the balance will be 100*(1.005)^10.
  */
 class LowInterestAccount implements Account {
-    //TODO implement this
+    double RATE = 0.005;
+
+    int accountNumber;
+    double balance;
+    String ownerName;
+
+    LowInterestAccount(int _accountNumber, String _ownerName, double _initial) {
+        accountNumber = _accountNumber;
+        balance = _initial;
+        ownerName = _ownerName;
+    }
 
     public int getAccountNumber() {
-        //TODO implement this
-        return 0;
+        return accountNumber;
     }
 
     public double getBalance() {
-        //TODO implement this
-        return 0;
+        return balance;
     }
 
     public String getOwner() {
-        //TODO implement this
-        return null;
+        return ownerName;
     }
 
     public void updateBalance(int elapsedDate) {
-        //TODO implement this
+        balance = balance * Math.pow(1 + RATE, elapsedDate);
     }
 
     public void deposit(double amount) {
-        //TODO implement this
+        balance += amount;
     }
 
     public void withdraw(double amount) throws IllegalOperationException {
-        //TODO implement this
+        if(balance < amount) {
+            throw new IllegalOperationException("Not enough balance");
+        }
+        balance -= amount;
     }
 }
