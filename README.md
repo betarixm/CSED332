@@ -6,5 +6,5 @@
     - Reformat File (Shift + Option + Command + L)
         - Reformat selected files.
 
-2. Answer2
+2. Select a chunk of code and press `Command + L` to comment or uncomment.
 3. Answer3
