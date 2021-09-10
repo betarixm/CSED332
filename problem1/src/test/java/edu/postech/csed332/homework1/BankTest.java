@@ -26,7 +26,7 @@ public class BankTest {
         Account s = wb.findAccount(100000);
         s.deposit(10000.);
         s.updateBalance(20);
-        assertEquals(s.getBalance(), 122019.00399479672);
+        assertEquals(s.getBalance(), 122019.00399479672, 0.00001);
     }
 }
 
