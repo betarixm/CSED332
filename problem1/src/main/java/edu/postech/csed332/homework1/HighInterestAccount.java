@@ -7,32 +7,43 @@ package edu.postech.csed332.homework1;
  * The balance should always be greater than or equal to 1000.
  */
 class HighInterestAccount implements Account {
-    //TODO implement this
+    double RATE = 0.01;
+    double BOUND = 1000;
+
+    int accountNumber;
+    double balance;
+    String ownerName;
+
+    HighInterestAccount(int _accountNumber, String _ownerName, double _initial) {
+        accountNumber = _accountNumber;
+        balance = _initial;  // Ensure that _initial is greater than or equal to BOUND
+        ownerName = _ownerName;
+    }
 
     public int getAccountNumber() {
-        //TODO implement this
-        return 0;
+        return accountNumber;
     }
 
     public double getBalance() {
-        //TODO implement this
-        return 0;
+        return balance;
     }
 
     public String getOwner() {
-        //TODO implement this
-        return null;
+        return ownerName;
     }
 
     public void updateBalance(int elapsedDate) {
-        //TODO implement this
+        balance = balance * Math.pow(1 + RATE, elapsedDate);
     }
 
     public void deposit(double amount) {
-        //TODO implement this
+        balance += amount;
     }
 
     public void withdraw(double amount) throws IllegalOperationException {
-        //TODO implement this
+        if(balance - BOUND < amount) {
+            throw new IllegalOperationException("Not enough balance");
+        }
+        balance -= amount;
     }
 }
