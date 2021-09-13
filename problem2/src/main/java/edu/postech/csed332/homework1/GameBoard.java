@@ -178,10 +178,6 @@ public class GameBoard {
                     e.getValue().remove(m);
                     placeUnit(m, pNew);
                 }
-
-                if(!isValid()) {
-                    System.out.println("asdf");
-                }
             }
         }
     }
@@ -205,25 +201,16 @@ public class GameBoard {
 
             // (a) All units are in the boundaries.
             if (units.size() > 0 && !isValidPositionRange(p)) {
-                System.out.println("(A)");
-                System.out.println(p.getX());
-                System.out.println(p.getY());
                 return false;
             }
 
             // (b) Different ground units cannot be on the same tile.
             if (units.stream().filter(Unit::isGround).count() > 1) {
-                System.out.println("(B)");
-                System.out.println(p.getX());
-                System.out.println(p.getY());
                 return false;
             }
 
             // (c) Different air units cannot be on the same tile.
             if (units.stream().filter(u -> !u.isGround()).count() > 1) {
-                System.out.println("(C)");
-                System.out.println(p.getX());
-                System.out.println(p.getY());
                 return false;
             }
         }
