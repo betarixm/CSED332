@@ -9,27 +9,21 @@ package edu.postech.csed332.homework1;
  *
  * @see GameBoard#isValid
  */
-public class AirMob implements Monster {
+public class AirMob extends MovingMonster<AirTower> {
+    private final GameBoard board;
 
     public AirMob(GameBoard board) {
-        // TODO: implement this
-    }
-
-    @Override
-    public Position move() {
-        // TODO: implement this
-        return null;
+        super();
+        this.board = board;
     }
 
     @Override
     public boolean isGround() {
-        // TODO: implement this
         return false;
     }
 
     @Override
     public GameBoard getBoard() {
-        // TODO: implement this
-        return null;
+        return board;
     }
 }
