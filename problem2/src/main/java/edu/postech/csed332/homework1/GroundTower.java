@@ -10,21 +10,20 @@ import java.util.Set;
  * Feel free to modify this file, e.g., adding new fields or methods. If needed,
  * you can define a new (abstract) super class that this class inherits.
  */
-public class GroundTower implements Tower {
+public class GroundTower extends AttackTower {
+    GameBoard board;
 
     public GroundTower(GameBoard board) {
-        // TODO: implement this
+        this.board = board;
     }
 
     @Override
-    public Set<Monster> attack() {
-        // TODO: implement this
-        return null;
+    public boolean isTargetGround() {
+        return true;
     }
 
     @Override
     public GameBoard getBoard() {
-        // TODO: implement this
-        return null;
+        return board;
     }
 }
