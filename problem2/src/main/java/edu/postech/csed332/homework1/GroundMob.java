@@ -9,27 +9,22 @@ package edu.postech.csed332.homework1;
  *
  * @see GameBoard#isValid
  */
-public class GroundMob implements Monster {
+
+public class GroundMob extends MovingMonster<GroundTower> {
+    private final GameBoard board;
 
     public GroundMob(GameBoard board) {
-        // TODO: implement this
-    }
-
-    @Override
-    public Position move() {
-        // TODO implement this
-        return null;
+        super();
+        this.board = board;
     }
 
     @Override
     public boolean isGround() {
-        // TODO implement this
-        return false;
+        return true;
     }
 
     @Override
     public GameBoard getBoard() {
-        // TODO implement this
-        return null;
+        return board;
     }
 }
