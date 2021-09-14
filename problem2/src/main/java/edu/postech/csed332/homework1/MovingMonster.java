@@ -7,7 +7,7 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
     public static Set<Position> escapablePosition;
 
     private final Set<Position> prevPositions;
-    private List<Position> prevPositionHistory;
+    private final List<Position> prevPositionHistory;
 
     private Position prevPosition;
 
@@ -42,17 +42,20 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
 
     public double calculateScore(Position position) {
         double score = 0;
-        double W_KILL = -Double.MAX_VALUE;
+        double W_KILL = Double.NEGATIVE_INFINITY;
         double W_SURVIVE = 100000000;
         double W_DIST = 20000;
         double W_NEAR = 20000;
         double W_VERTICAL = 5000;
-        double W_ESCAPABLE = 10000;
-        double W_NEAR_ESCAPABLE = 10000;
+        double W_ESCAPABLE = 25000;
+        double W_NEAR_ESCAPABLE = 15000;
         double W_PREV = -1000000;
         double W_DIRECT_PREV = -Double.MAX_VALUE;
         double W_GOAL = Double.POSITIVE_INFINITY;
         double W_BLOCK = Double.NEGATIVE_INFINITY;
+        double W_PREV_SEARCH = -100000;
+
+        int PREV_SEARCH_DEPTH = 4;
 
         GameBoard board = this.getBoard();
 
@@ -90,6 +93,11 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
 
         score += (prevPosition.getX() == position.getX() && prevPosition.getY() == position.getY()) ? W_DIRECT_PREV : 0;
 
+        for(int i = 1; i <= PREV_SEARCH_DEPTH; i++) {
+            if (prevPositionHistory.size() >= i && prevPositionHistory.get(prevPositionHistory.size() - i) == position) {
+                score += W_PREV_SEARCH * ((double) i / PREV_SEARCH_DEPTH);
+            }
+        }
         return score;
     }
 
