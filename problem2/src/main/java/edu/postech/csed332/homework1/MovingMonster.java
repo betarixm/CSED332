@@ -124,9 +124,7 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
                 curMaxScore = curScore;
                 curMaxPosition = p;
             }
-            System.out.println(curScore);
         }
-        System.out.println("===");
 
         prevPosition = position;
         prevPositions.add(curMaxPosition);
