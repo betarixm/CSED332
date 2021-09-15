@@ -41,7 +41,6 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
     }
 
     public double calculateScore(Position position) {
-        double score = 0;
         double W_KILL = Double.NEGATIVE_INFINITY;
         double W_SURVIVE = 100000000;
         double W_DIST = 20000;
@@ -49,7 +48,7 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
         double W_VERTICAL = 5000;
         double W_ESCAPABLE = 25000;
         double W_NEAR_ESCAPABLE = 15000;
-        double W_PREV = -1000000;
+        double W_PREV = -10000000;
         double W_DIRECT_PREV = -Double.MAX_VALUE;
         double W_GOAL = Double.POSITIVE_INFINITY;
         double W_BLOCK = Double.NEGATIVE_INFINITY;
@@ -58,46 +57,55 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
         int PREV_SEARCH_DEPTH = 4;
 
         GameBoard board = this.getBoard();
-
         Position goal = board.getGoalPosition();
+        Set<Position> pAdjacent = adjacentPositions(position);
 
+        double score = 0;
+        double dist = Math.pow(position.getX() - goal.getX(), 2) + Math.pow(goal.getY(), 2);
+
+        // (Policy) +Inf at goal
         if (position == goal) {
             return W_GOAL;
         }
 
+        // (Policy) -Inf at overlap
         if (board.getUnitsAt(position).stream().anyMatch(u -> isGround() == u.isGround())) {
             return W_BLOCK;
         }
 
-        if (getPrevPositions().contains(position)) {
-            score += W_PREV;
-        }
-
-        Set<Position> pAdjacent = adjacentPositions(position);
-
+        // (Policy) Check adjacent towers
+        // (Policy) Bonus points for near-escape-positions
         for (Position p : pAdjacent) {
             Set<Unit> units = board.getUnitsAt(p);
             score += units.stream().anyMatch(u -> isGround() ? u instanceof GroundTower : u instanceof AirTower) ? W_KILL : W_SURVIVE;
             score += escapablePosition.contains(p) ? W_NEAR_ESCAPABLE : 0;
         }
 
-        double dist = Math.pow(position.getX() - goal.getX(), 2) + Math.pow(goal.getY(), 2);
-
-        score += 1.0 / (dist * 100 + W_DIST);
-
-        score += (dist < (board.getHeight() / 2.0)) ? W_NEAR : 0;
-
-        score += 1.0 / (Math.abs(position.getY() - goal.getY()) + W_VERTICAL);
-
-        score += (getEscapablePosition().contains(position)) ? W_ESCAPABLE : 0;
-
-        score += (prevPosition.getX() == position.getX() && prevPosition.getY() == position.getY()) ? W_DIRECT_PREV : 0;
-
+        // (Policy) Deduct points for already visited positions; There's weight over time.
         for (int i = 1; i <= PREV_SEARCH_DEPTH; i++) {
             if (prevPositionHistory.size() >= i && prevPositionHistory.get(prevPositionHistory.size() - i) == position) {
                 score += W_PREV_SEARCH * ((double) i / PREV_SEARCH_DEPTH);
             }
         }
+
+        // (Policy) The distance to the goal
+        score += 1.0 / (dist * 100 + W_DIST);
+
+        // (Policy) Bonus points near the goal
+        score += (dist < (board.getHeight() / 2.0)) ? W_NEAR : 0;
+
+        // (Policy) Inducing monsters to move in the vertical directionally
+        score += 1.0 / (Math.abs(position.getY() - goal.getY()) + W_VERTICAL);
+
+        // (Policy) Deduct points for already visited positions
+        score += (getPrevPositions().contains(position)) ? W_PREV : 0;
+
+        // (Policy) High points for positions where other monsters have escaped
+        score += (getEscapablePosition().contains(position)) ? W_ESCAPABLE : 0;
+
+        // (Policy) Deduct points for the position monster visited right before
+        score += (prevPosition.getX() == position.getX() && prevPosition.getY() == position.getY()) ? W_DIRECT_PREV : 0;
+
         return score;
     }
 
