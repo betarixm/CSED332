@@ -1,6 +1,8 @@
 package edu.postech.csed332.homework1;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 
 public abstract class MovingMonster<T extends AttackTower> implements Monster {
@@ -118,6 +120,9 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
         Position position = board.getPosition(this);
         Position curMaxPosition = position;
 
+        Set<Position> pAdjacent = adjacentPositions(position);
+        Predicate<Position> isAllocable = (p) -> !board.isValidPositionRange(p) || allocatedPosition.contains(p) || board.getUnitsAt(p).stream().anyMatch(u -> isGround() == u.isGround());
+
         double curMaxScore = Double.NEGATIVE_INFINITY;
         double curScore;
 
@@ -125,16 +130,7 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
             prevPosition = position;
         }
 
-        Set<Position> pAdjacent = new HashSet<>(Arrays.asList(
-                new Position(position.getX() - 1, position.getY()), new Position(position.getX() + 1, position.getY()),
-                new Position(position.getX(), position.getY() - 1), new Position(position.getX(), position.getY() + 1)
-        ));
-
-        for (Position p : pAdjacent) {
-            if (!board.isValidPositionRange(p) || allocatedPosition.contains(p) || board.getUnitsAt(p).stream().anyMatch(u -> isGround() == u.isGround())) {
-                continue;
-            }
-
+        for (Position p : pAdjacent.stream().filter(isAllocable).collect(Collectors.toSet())) {
             curScore = calculateScore(p);
             if (curScore > curMaxScore) {
                 curMaxScore = curScore;
@@ -142,9 +138,10 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
             }
         }
 
-        prevPosition = position;
         prevPositions.add(curMaxPosition);
         prevPositionHistory.add(curMaxPosition);
+
+        prevPosition = position;
 
         if (curMaxPosition == board.getGoalPosition()) {
             escapablePosition.addAll(prevPositions);
