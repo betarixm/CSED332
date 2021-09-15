@@ -120,8 +120,10 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
         Position position = board.getPosition(this);
         Position curMaxPosition = position;
 
-        Set<Position> pAdjacent = adjacentPositions(position);
-        Predicate<Position> isAllocable = (p) -> !board.isValidPositionRange(p) || allocatedPosition.contains(p) || board.getUnitsAt(p).stream().anyMatch(u -> isGround() == u.isGround());
+        Set<Position> pAdjacent = GameBoard.adjacentPositions(position);
+        Predicate<Position> isAllocable = (p) -> board.isValidPositionRange(p)
+                && !allocatedPosition.contains(p)
+                && board.getUnitsAt(p).stream().noneMatch(u -> isGround() == u.isGround());
 
         double curMaxScore = Double.NEGATIVE_INFINITY;
         double curScore;
