@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 public abstract class AttackTower implements Tower {
     public abstract GameBoard getBoard();
+
     public abstract boolean isTargetGround();
 
     @Override

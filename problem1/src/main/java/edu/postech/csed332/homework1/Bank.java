@@ -13,6 +13,7 @@ import java.util.Map;
 public class Bank {
     int BOUND = 100000;
     ArrayList<Account> accounts = new ArrayList<>();
+
     /**
      * Create a bank. Initially, there is no account.
      */
@@ -59,7 +60,7 @@ public class Bank {
      * @return the newly created account; null if not possible
      */
     Account createAccount(String name, ACCTYPE accType, double initial) {
-        if(accType == ACCTYPE.HIGH && initial < 1000) {
+        if (accType == ACCTYPE.HIGH && initial < 1000) {
             return null;
         }
 

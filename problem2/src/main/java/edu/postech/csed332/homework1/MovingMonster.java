@@ -93,7 +93,7 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
 
         score += (prevPosition.getX() == position.getX() && prevPosition.getY() == position.getY()) ? W_DIRECT_PREV : 0;
 
-        for(int i = 1; i <= PREV_SEARCH_DEPTH; i++) {
+        for (int i = 1; i <= PREV_SEARCH_DEPTH; i++) {
             if (prevPositionHistory.size() >= i && prevPositionHistory.get(prevPositionHistory.size() - i) == position) {
                 score += W_PREV_SEARCH * ((double) i / PREV_SEARCH_DEPTH);
             }

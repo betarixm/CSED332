@@ -137,7 +137,7 @@ public class GameBoard {
     public void step() {
         // (1) Every monster at the goal position escapes from the game.
         escaped += getUnitsAt(goal).size();
-        if(board.get(goal) != null) {
+        if (board.get(goal) != null) {
             board.get(goal).clear();
         }
 
