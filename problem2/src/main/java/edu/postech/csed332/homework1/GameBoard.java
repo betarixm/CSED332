@@ -22,11 +22,17 @@ public class GameBoard {
     private final Position goal;
     private final int width, height;
 
-    // TODO: add more fields to implement this class
     private final Map<Position, Set<Unit>> board;
 
     private int escaped;
     private int killed;
+
+    public static Set<Position> adjacentPositions(Position position) {
+        return new HashSet<>(Arrays.asList(
+                new Position(position.getX() - 1, position.getY()), new Position(position.getX() + 1, position.getY()),
+                new Position(position.getX(), position.getY() - 1), new Position(position.getX(), position.getY() + 1)
+        ));
+    }
 
     /**
      * Creates a game board with a given width and height. The goal position
@@ -151,10 +157,7 @@ public class GameBoard {
         // (2) Each tower attacks nearby remaining monsters (using the attack method)
         for (Map.Entry<Position, Set<Unit>> e : towerEntry) {
             Position pTower = e.getKey();
-            Set<Position> adjacent = new HashSet<>(Arrays.asList(
-                    new Position(pTower.getX() - 1, pTower.getY()), new Position(pTower.getX() + 1, pTower.getY()),
-                    new Position(pTower.getX(), pTower.getY() - 1), new Position(pTower.getX(), pTower.getY() + 1)
-            ));
+            Set<Position> adjacent = adjacentPositions(pTower);
 
             Set<Monster> target = e.getValue().stream()
                     .filter(u -> u instanceof Tower)

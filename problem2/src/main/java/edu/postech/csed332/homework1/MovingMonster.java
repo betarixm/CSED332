@@ -35,13 +35,6 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
         return prevPositions;
     }
 
-    private Set<Position> adjacentPositions(Position position) {
-        return new HashSet<>(Arrays.asList(
-                new Position(position.getX() - 1, position.getY()), new Position(position.getX() + 1, position.getY()),
-                new Position(position.getX(), position.getY() - 1), new Position(position.getX(), position.getY() + 1)
-        ));
-    }
-
     public double calculateScore(Position position) {
         double W_KILL = Double.NEGATIVE_INFINITY;
         double W_SURVIVE = 100000000;
@@ -60,7 +53,7 @@ public abstract class MovingMonster<T extends AttackTower> implements Monster {
 
         GameBoard board = this.getBoard();
         Position goal = board.getGoalPosition();
-        Set<Position> pAdjacent = adjacentPositions(position);
+        Set<Position> pAdjacent = GameBoard.adjacentPositions(position);
 
         double score = 0;
         double dist = Math.pow(position.getX() - goal.getX(), 2) + Math.pow(goal.getY(), 2);
