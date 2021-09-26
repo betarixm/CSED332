@@ -66,8 +66,14 @@ public final class Collection extends SerializableElement {
      * @return true on success, false on fail
      */
     public boolean deleteElement(Element element) {
-        // TODO implement this
-        return false;
+        if(element.getParentCollection() != this) {
+            return false;
+        }
+
+        element.setParentCollection(null);
+        elements.remove(element);
+
+        return true;
     }
 
     /**
