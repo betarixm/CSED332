@@ -37,10 +37,10 @@ public final class Book extends SerializableElement {
      * @param stringRepr the JSON string representation
      */
     public Book(String stringRepr) {
-        Map<String, Object> deserialized = deserializer(stringRepr);
+        JSONObject jsonObject = new JSONObject(stringRepr);
 
-        this.title = (String) deserialized.get(keyTitle);
-        this.authors = (List<String>) deserialized.get(keyAuthors);
+        this.title = (String) jsonObject.get(keyTitle);
+        this.authors = jsonObject.getJSONArray(keyAuthors).toList().stream().map(Object::toString).toList();
     }
 
     /**
@@ -98,15 +98,6 @@ public final class Book extends SerializableElement {
         return Map.of(
                 keyTitle, title,
                 keyAuthors, authors
-        );
-    }
-
-    @Override
-    public Map<String, Object> deserializer(String json) {
-        JSONObject jsonObject = new JSONObject(json);
-        return Map.of(
-                keyTitle, jsonObject.get(keyTitle),
-                keyAuthors, jsonObject.getJSONArray(keyAuthors).toList()
         );
     }
 }

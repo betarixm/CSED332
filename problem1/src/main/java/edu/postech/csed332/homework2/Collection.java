@@ -87,4 +87,17 @@ public final class Collection extends SerializableElement {
     public List<Element> getElements() {
         return elements;
     }
+
+    @Override
+    public Map<String, Object> serializer() {
+        List<Map<String, Object>> serializedObjects = new ArrayList<>();
+
+        return Map.of(
+                keyName, name,
+                keyElements, elements.stream().map(e -> (e instanceof SerializableElement)
+                        ? ((SerializableElement) e).serializer()
+                        : elements.toString())
+                        .toList()
+        );
+    }
 }

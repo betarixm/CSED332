@@ -4,5 +4,4 @@ import java.util.Map;
 
 public abstract class SerializableElement extends Element {
     public abstract Map<String, Object> serializer();
-    public abstract Map<String, Object> deserializer(String json);
 }
