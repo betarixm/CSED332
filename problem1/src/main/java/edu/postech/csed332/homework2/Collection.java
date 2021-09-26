@@ -17,6 +17,9 @@ public final class Collection extends SerializableElement {
     private List<Element> elements;
     private String name;
 
+    private static final String keyName = "name";
+    private static final String keyElements = "elements";
+
     /**
      * Creates a new collection with the given name.
      *
@@ -24,7 +27,7 @@ public final class Collection extends SerializableElement {
      */
     public Collection(String name) {
         this.name = name;
-        // TODO write more code if necessary
+        this.elements = new ArrayList<>();
     }
 
     /**
@@ -33,8 +36,22 @@ public final class Collection extends SerializableElement {
      * @param stringRepr the string representation
      */
     public static Collection restoreCollection(String stringRepr) {
-        // TODO implement this
-        return null;
+        JSONObject json = new JSONObject(stringRepr);
+        JSONArray elements = new JSONArray(json.getJSONArray(keyElements));
+
+        Collection collection = new Collection(json.getString(keyName));
+
+        for(Object i: elements){
+            JSONObject element = (JSONObject) i;
+
+            if(element.has(keyElements)) {
+                collection.addElement(restoreCollection(element.toString()));
+            } else {
+                collection.addElement(new Book(element.toString()));
+            }
+        }
+
+        return collection;
     }
 
     /**
@@ -45,8 +62,7 @@ public final class Collection extends SerializableElement {
      * @return string representation of this collection
      */
     public String getStringRepresentation() {
-        // TODO implement this
-        return null;
+        return (new JSONObject(serializer())).toString();
     }
 
     /**
