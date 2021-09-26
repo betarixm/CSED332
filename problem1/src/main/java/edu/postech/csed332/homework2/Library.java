@@ -97,8 +97,21 @@ public final class Library {
      * @return Return the set of books written by the given author
      */
     public Set<Book> findBooksByAuthor(String author) {
-        // TODO implement this
-        return null;
+        Set<Book> result = new HashSet<>();
+
+        collections.forEach(c -> recursiveFindBooksByAuthor(c, author, result));
+
+        return result;
+    }
+
+    private void recursiveFindBooksByAuthor(Collection collection, String target, Set<Book> books) {
+        for (Element e: collection.getElements()) {
+            if (e instanceof Collection) {
+                recursiveFindBooksByAuthor((Collection) e, target, books);
+            } else if (e instanceof Book && ((Book) e).getAuthors().contains(target)) {
+                books.add((Book) e);
+            }
+        }
     }
 
     /**
