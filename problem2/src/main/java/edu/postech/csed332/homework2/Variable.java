@@ -33,20 +33,17 @@ public class Variable implements Exp {
 
     @Override
     public Set<Integer> vars() {
-        // TODO: implement this
-        return null;
+        return Set.of(identifier);
     }
 
     @Override
     public Boolean evaluate(Map<Integer, Boolean> assignment) {
-        // TODO: implement this
-        return null;
+        return assignment.get(identifier);
     }
 
     @Override
     public Exp simplify() {
-        // TODO: implement this
-        return null;
+        return new Variable(identifier);
     }
 
     @Override
