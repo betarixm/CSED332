@@ -1,5 +1,6 @@
 package edu.postech.csed332.homework2;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,20 +30,41 @@ public class Negation implements Exp {
 
     @Override
     public Set<Integer> vars() {
-        // TODO: implement this
-        return null;
+        return subexp.vars();
     }
 
     @Override
     public Boolean evaluate(Map<Integer, Boolean> assignment) {
-        // TODO: implement this
-        return null;
+        return !subexp.evaluate(assignment);
     }
 
     @Override
     public Exp simplify() {
-        // TODO: implement this
-        return null;
+        // (0) Simplify subexps
+        Exp exp = subexp.simplify();
+
+        if (exp instanceof Conjunction) {
+            // (3) De Morgan’s laws
+            exp = new Disjunction(
+                    ((Conjunction) exp).getSubexps().stream()
+                            .map(Negation::new)
+                            .toList().toArray(new Exp[0])
+            );
+        } else if (exp instanceof Disjunction) {
+            // (3) De Morgan’s laws
+            exp = new Conjunction(
+                    ((Disjunction) exp).getSubexps().stream()
+                            .map(Negation::new)
+                            .toList().toArray(new Exp[0])
+            );
+        } else if (exp instanceof Negation) {
+            // (5) Double negation law
+            exp = new Conjunction(((Negation) exp).subexp);
+        } else {
+            exp = new Negation(exp);
+        }
+
+        return exp;
     }
 
     @Override
