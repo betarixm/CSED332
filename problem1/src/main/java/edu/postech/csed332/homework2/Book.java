@@ -1,6 +1,10 @@
 package edu.postech.csed332.homework2;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A book contains the title and the author(s), each of which is
@@ -11,6 +15,9 @@ import java.util.List;
 public final class Book extends Element {
     private String title;
     private List<String> authors;
+
+    private final String keyTitle = "title";
+    private final String keyAuthors = "authors";
 
     /**
      * Builds a book with the given title and author(s).
@@ -78,5 +85,20 @@ public final class Book extends Element {
      */
     public List<String> getAuthors() {
         return authors;
+    }
+
+    private Map<String, Object> serializer() {
+        return Map.of(
+                keyTitle, title,
+                keyAuthors, authors
+        );
+    }
+
+    private Map<String, Object> deserializer(String jsonString) {
+        JSONObject jsonObject = new JSONObject(jsonString);
+        return Map.of(
+                keyTitle, jsonObject.get(keyTitle),
+                keyAuthors, jsonObject.getJSONArray(keyAuthors).toList()
+        );
     }
 }
