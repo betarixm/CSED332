@@ -83,4 +83,17 @@ public final class Library {
     public List<Collection> getCollections() {
         return collections;
     }
+
+    public List<Map<String, Object>> serializer() {
+        return collections.stream().map(Collection::serializer).toList();
+    }
+
+    public List<Collection> deserializer(String json) {
+        JSONArray arr = new JSONArray(json);
+
+        return IntStream.range(0, arr.length())
+                .mapToObj(arr::getJSONObject)
+                .map(j -> Collection.restoreCollection(j.toString()))
+                .toList();
+    }
 }
