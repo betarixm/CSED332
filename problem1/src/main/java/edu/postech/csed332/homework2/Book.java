@@ -67,8 +67,13 @@ public final class Book extends Element {
      * @return the list of collections
      */
     public List<Collection> getContainingCollections() {
-        // TODO implement this
-        return null;
+        List<Collection> result = new ArrayList<>();
+
+        for(Collection parent = getParentCollection(); parent != null; parent = parent.getParentCollection()) {
+            result.add(parent);
+        }
+
+        return result;
     }
 
     /**
