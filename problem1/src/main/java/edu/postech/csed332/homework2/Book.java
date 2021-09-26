@@ -51,8 +51,7 @@ public final class Book extends Element {
      * @return the string representation
      */
     public String getStringRepresentation() {
-        // TODO implement this
-        return null;
+        return (new JSONObject(serializer())).toString();
     }
 
     /**
