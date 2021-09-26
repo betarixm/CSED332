@@ -93,15 +93,17 @@ public final class Book extends SerializableElement {
         return authors;
     }
 
-    private Map<String, Object> serializer() {
+    @Override
+    public Map<String, Object> serializer() {
         return Map.of(
                 keyTitle, title,
                 keyAuthors, authors
         );
     }
 
-    private Map<String, Object> deserializer(String jsonString) {
-        JSONObject jsonObject = new JSONObject(jsonString);
+    @Override
+    public Map<String, Object> deserializer(String json) {
+        JSONObject jsonObject = new JSONObject(json);
         return Map.of(
                 keyTitle, jsonObject.get(keyTitle),
                 keyAuthors, jsonObject.getJSONArray(keyAuthors).toList()
