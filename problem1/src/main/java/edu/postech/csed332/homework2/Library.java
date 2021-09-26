@@ -45,9 +45,17 @@ public final class Library {
      * @param fileName the file where to save the library
      */
     public void saveLibraryToFile(String fileName) {
-        // TODO implement this
+        String json = (new JSONArray(serializer())).toString();
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
+            bw.write(json);
+            bw.flush();
+            bw.close();
+        } catch (IOException ignored) {
+        }
     }
-    
+
     /**
      * Returns the set of all books that belong to the collections
      * of a given name. Note that different collections may have the
