@@ -38,7 +38,10 @@ public final class Book extends Element {
      * @param stringRepr the JSON string representation
      */
     public Book(String stringRepr) {
-        // TODO implement this
+        Map<String, Object> deserialized = deserializer(stringRepr);
+
+        this.title = (String) deserialized.get(keyTitle);
+        this.authors = (List<String>) deserialized.get(keyAuthors);
     }
 
     /**
