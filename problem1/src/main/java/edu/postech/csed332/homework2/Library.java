@@ -27,7 +27,16 @@ public final class Library {
      * @param fileName the file from where to restore the library.
      */
     public Library(String fileName) {
-        // TODO implement this
+        this.collections = new ArrayList<>();
+        try {
+            BufferedReader bf = new BufferedReader(new FileReader(fileName));
+            String json = bf.lines().collect(Collectors.joining());
+            bf.close();
+
+            this.collections = deserializer(json);
+        } catch (IOException e) {
+            this.collections = new ArrayList<>();
+        }
     }
 
     /**
