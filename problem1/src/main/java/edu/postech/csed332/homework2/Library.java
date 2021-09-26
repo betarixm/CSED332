@@ -18,7 +18,7 @@ public final class Library {
      * Builds a new, empty library.
      */
     public Library() {
-        // TODO implement this
+        this.collections = new ArrayList<>();
     }
 
     /**
