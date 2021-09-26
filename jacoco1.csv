@@ -1,0 +1,6 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+problem1,edu.postech.csed332.homework2,Element,0,10,0,0,0,4,0,3,0,3
+problem1,edu.postech.csed332.homework2,Book,0,85,0,2,0,19,0,8,0,7
+problem1,edu.postech.csed332.homework2,Library,7,217,2,18,3,47,2,21,0,13
+problem1,edu.postech.csed332.homework2,Collection,3,129,1,9,1,31,1,13,0,9
+problem1,edu.postech.csed332.homework2,SerializableElement,0,3,0,0,0,1,0,1,0,1
