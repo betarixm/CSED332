@@ -28,7 +28,6 @@ public final class Book extends Element {
     public Book(String title, List<String> authors) {
         this.title = title;
         this.authors = authors;
-        // TODO write more code if necessary
     }
 
     /**
@@ -69,7 +68,7 @@ public final class Book extends Element {
     public List<Collection> getContainingCollections() {
         List<Collection> result = new ArrayList<>();
 
-        for(Collection parent = getParentCollection(); parent != null; parent = parent.getParentCollection()) {
+        for (Collection parent = getParentCollection(); parent != null; parent = parent.getParentCollection()) {
             result.add(parent);
         }
 
