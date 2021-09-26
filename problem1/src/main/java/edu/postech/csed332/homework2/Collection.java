@@ -1,6 +1,11 @@
 package edu.postech.csed332.homework2;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The Collection class represents a single collection, which contains
