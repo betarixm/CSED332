@@ -8,7 +8,7 @@ import java.util.List;
  * book and every subcollection in the collection. A collection can
  * also be exported to and imported from a JSON string representation.
  */
-public final class Collection extends Element {
+public final class Collection extends SerializableElement {
     private List<Element> elements;
     private String name;
 

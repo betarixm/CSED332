@@ -12,7 +12,7 @@ import java.util.Map;
  * from a string representation in JSON (https://www.json.org/).
  * Using the string, you should be able to construct a book object.
  */
-public final class Book extends Element {
+public final class Book extends SerializableElement {
     private String title;
     private List<String> authors;
 
