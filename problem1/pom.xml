@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.postech.csed332</groupId>
-    <artifactId>homework2</artifactId>
+    <artifactId>problem1</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>homework2</name>
+    <name>problem1</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -52,6 +52,17 @@
 
 
     <dependencies>
-        <!-- add extra dependencies -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
+        </dependency>
     </dependencies>
 </project>
