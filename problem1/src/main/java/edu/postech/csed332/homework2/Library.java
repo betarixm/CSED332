@@ -66,8 +66,25 @@ public final class Library {
      * @return a set of books
      */
     public Set<Book> findBooks(String collection) {
-        // TODO implement this
-        return null;
+        Set<Book> result = new HashSet<>();
+
+        collections.forEach(c -> recursiveFindBooks(c, collection, result, false));
+
+        return (result.size() > 0) ? result : null;
+    }
+
+    private void recursiveFindBooks(Collection collection, String target, Set<Book> books, boolean isChild) {
+        if (target.equals(collection.getName())) {
+            isChild = true;
+        }
+
+        for (Element e : collection.getElements()) {
+            if (e instanceof Collection) {
+                recursiveFindBooks((Collection) e, target, books, isChild);
+            } else if (isChild && e instanceof Book) {
+                books.add((Book) e);
+            }
+        }
     }
 
     /**
