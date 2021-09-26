@@ -52,4 +52,33 @@ public class Disjunction implements Exp {
     public String toString() {
         return "(" + subexps.stream().map(i -> i.toString()).collect(Collectors.joining(" || ")) + ")";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        if (this == obj) {
+            return true;
+        }
+
+        Disjunction that = (Disjunction) obj;
+
+        return this.subexps.containsAll(that.subexps) && that.subexps.containsAll(this.subexps);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+        int i = 0;
+        for (Exp e : subexps) {
+            result += e.hashCode() * Math.pow(31, ++i);
+        }
+        return result;
+    }
 }

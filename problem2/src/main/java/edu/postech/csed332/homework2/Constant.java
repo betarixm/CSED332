@@ -47,4 +47,28 @@ public class Constant implements Exp {
     public String toString() {
         return Boolean.toString(value);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        if (this == obj) {
+            return true;
+        }
+
+        Constant that = (Constant) obj;
+
+        return this.value == that.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return value ? 1 : 2;
+    }
 }

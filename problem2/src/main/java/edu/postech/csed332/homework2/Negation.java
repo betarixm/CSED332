@@ -49,4 +49,28 @@ public class Negation implements Exp {
     public String toString() {
         return "(! " + subexp + ")";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        if (this == obj) {
+            return true;
+        }
+
+        Negation that = (Negation) obj;
+
+        return this.subexp.equals(that.subexp);
+    }
+
+    @Override
+    public int hashCode() {
+        return subexp.hashCode() * 101;
+    }
 }

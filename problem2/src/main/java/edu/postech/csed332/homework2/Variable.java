@@ -53,4 +53,28 @@ public class Variable implements Exp {
     public String toString() {
         return "p" + identifier;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+
+        if (this == obj) {
+            return true;
+        }
+
+        Variable that = (Variable) obj;
+
+        return this.identifier == that.identifier;
+    }
+
+    @Override
+    public int hashCode() {
+        return 2 + identifier;
+    }
 }
