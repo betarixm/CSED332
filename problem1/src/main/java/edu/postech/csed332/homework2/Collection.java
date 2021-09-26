@@ -53,8 +53,14 @@ public final class Collection extends SerializableElement {
      * @return true on success, false on fail
      */
     public boolean addElement(Element element) {
-        // TODO implement this
-        return false;
+        if(element.getParentCollection() != null) {
+            return false;
+        }
+
+        elements.add(element);
+        element.setParentCollection(this);
+
+        return true;
     }
 
     /**
