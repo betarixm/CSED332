@@ -142,13 +142,11 @@ public class AdjacencyListGraph<N extends Comparable<N>> implements MutableGraph
      * @return true if the representation of this graph is valid
      */
     boolean checkInv() {
-        Set<N> vertices = getVertices();
+        Set<Edge<N>> edges = getEdges();
 
-        for (N key: adjMap.keySet()) {
-            for(N target: adjMap.get(key)) {
-                if (!vertices.contains(target)) {
-                    return false;
-                }
+        for (Edge<N> edge: edges) {
+            if((!adjMap.containsKey(edge.getSource())) || (!adjMap.containsKey(edge.getTarget()))) {
+                return false;
             }
         }
 
