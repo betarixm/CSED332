@@ -202,7 +202,7 @@ public class DelegateTree<N extends Comparable<N>> implements MutableTree<N> {
         }
 
         for(N n : vertices) {
-            if (getSources(n).size() != 1) {
+            if (n != root && getSources(n).size() != 1) {
                 return false;
             }
         }
