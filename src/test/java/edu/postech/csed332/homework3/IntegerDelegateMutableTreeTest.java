@@ -24,7 +24,50 @@ public class IntegerDelegateMutableTreeTest extends AbstractMutableTreeTest<Inte
         return tree.checkInv();
     }
 
-    // TODO: write more white-box test cases to achieve more code coverage, if needed.
-    // You do not need to add more test methods, if you tests already meet the desired coverage.
+    @Test
+    void testConstructor() {
+        MutableGraph<Integer> graph = new AdjacencyListGraph<>();
+        graph.addVertex(v1);
 
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            tree = new DelegateTree<>(graph);
+        });
+    }
+
+    @Test
+    void testCheckInvEdgeToRoot() {
+        MutableGraph<Integer> graph = new AdjacencyListGraph<>();
+        tree = new DelegateTree<>(graph);
+        tree.addVertex(v1);
+        tree.addEdge(v1, v2);
+
+        graph.addEdge(v2, v1);
+
+        Assertions.assertFalse(checkInv());
+    }
+
+    @Test
+    void testCheckInvNotReachable() {
+        MutableGraph<Integer> graph = new AdjacencyListGraph<>();
+        tree = new DelegateTree<>(graph);
+        tree.addVertex(v1);
+        tree.addEdge(v1, v2);
+
+        graph.addVertex(v3);
+
+        Assertions.assertFalse(checkInv());
+    }
+
+    @Test
+    void testCheckInvMultipleParent() {
+        MutableGraph<Integer> graph = new AdjacencyListGraph<>();
+        tree = new DelegateTree<>(graph);
+        tree.addVertex(v1);
+        tree.addEdge(v1, v2);
+        tree.addEdge(v1, v3);
+
+        graph.addEdge(v3, v2);
+
+        Assertions.assertFalse(checkInv());
+    }
 }
