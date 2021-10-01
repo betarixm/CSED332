@@ -116,8 +116,12 @@ public class DelegateTree<N extends Comparable<N>> implements MutableTree<N> {
     }
 
     private void removeVertexRecursive(@NotNull N vertex) {
-        for (N v : delegate.getTargets(vertex)) {
-            removeVertexRecursive(v);
+        Set<N> targets = new HashSet<>(delegate.getTargets(vertex));
+        Iterator<N> iter = targets.iterator();
+
+        while(iter.hasNext()) {
+            removeVertexRecursive(iter.next());
+            iter.remove();
         }
 
         delegate.removeVertex(vertex);
