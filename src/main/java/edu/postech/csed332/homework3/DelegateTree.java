@@ -35,12 +35,10 @@ public class DelegateTree<N extends Comparable<N>> implements MutableTree<N> {
      *   AF(r) = a matrix, M, such that,
      *     M_{i,j} = (Edge (i, j) exists) ? 1 : 0
      *     where v1 = 1, v2 = 2, ...
-     *   (*) Note that M is upper triangular matrix of which diagonal entries are zero.
      */
 
     /*
      * Class Invariant:
-     *   - AF(r) is upper triangular matrix of which diagonal entries are zero.
      *   - delegate is not null.
      *   - depthMap is not null.
      *   - There's no edge targeting root.
