@@ -106,7 +106,7 @@ public abstract class AbstractMutableTreeTest<V extends Comparable<V>, T extends
 
         Assertions.assertEquals(tree.getVertices(), Set.of(v1, v2, v3));
 
-        for(V v : Set.of(v4, v5, v6, v7, v8)) {
+        for (V v : Set.of(v4, v5, v6, v7, v8)) {
             Assertions.assertFalse(tree.containsVertex(v));
         }
 
@@ -143,7 +143,7 @@ public abstract class AbstractMutableTreeTest<V extends Comparable<V>, T extends
 
         Assertions.assertEquals(tree.getVertices(), Set.of(v1, v2, v3));
 
-        for(V v : Set.of(v4, v5, v6, v7, v8)) {
+        for (V v : Set.of(v4, v5, v6, v7, v8)) {
             Assertions.assertFalse(tree.containsVertex(v));
         }
 
@@ -161,5 +161,75 @@ public abstract class AbstractMutableTreeTest<V extends Comparable<V>, T extends
         Assertions.assertFalse(tree.addEdge(v3, v2));
 
         Assertions.assertTrue(checkInv());
+    }
+
+    @Test
+    void testGetSources() {
+        Assertions.assertTrue(tree.addVertex(v1));
+        Assertions.assertTrue(tree.addEdge(v1, v2));
+        Assertions.assertTrue(tree.addEdge(v2, v3));
+        Assertions.assertTrue(tree.addEdge(v3, v4));
+        Assertions.assertTrue(tree.addEdge(v1, v5));
+        Assertions.assertTrue(tree.addEdge(v5, v7));
+        Assertions.assertTrue(tree.addEdge(v5, v6));
+        Assertions.assertTrue(tree.addEdge(v7, v8));
+
+        Assertions.assertEquals(tree.getSources(v1), Set.of());
+        Assertions.assertEquals(tree.getSources(v2), Set.of(v1));
+        Assertions.assertEquals(tree.getSources(v8), Set.of(v7));
+    }
+
+    @Test
+    void testGetTargets() {
+        Assertions.assertTrue(tree.addVertex(v1));
+        Assertions.assertTrue(tree.addEdge(v1, v2));
+        Assertions.assertTrue(tree.addEdge(v2, v3));
+        Assertions.assertTrue(tree.addEdge(v3, v4));
+        Assertions.assertTrue(tree.addEdge(v1, v5));
+        Assertions.assertTrue(tree.addEdge(v5, v7));
+        Assertions.assertTrue(tree.addEdge(v5, v6));
+        Assertions.assertTrue(tree.addEdge(v7, v8));
+
+        Assertions.assertEquals(tree.getTargets(v1), Set.of(v2, v5));
+        Assertions.assertEquals(tree.getTargets(v5), Set.of(v6, v7));
+        Assertions.assertEquals(tree.getTargets(v8), Set.of());
+    }
+
+    @Test
+    void testGetEdges() {
+        Assertions.assertTrue(tree.addVertex(v1));
+        Assertions.assertTrue(tree.addEdge(v1, v2));
+        Assertions.assertTrue(tree.addEdge(v2, v3));
+        Assertions.assertTrue(tree.addEdge(v3, v4));
+        Assertions.assertTrue(tree.addEdge(v1, v5));
+        Assertions.assertTrue(tree.addEdge(v5, v7));
+        Assertions.assertTrue(tree.addEdge(v5, v6));
+        Assertions.assertTrue(tree.addEdge(v7, v8));
+
+        Assertions.assertEquals(tree.getEdges(), Set.of(
+                new Edge<V>(v1, v2),
+                new Edge<V>(v1, v5),
+                new Edge<V>(v2, v3),
+                new Edge<V>(v3, v4),
+                new Edge<V>(v5, v6),
+                new Edge<V>(v5, v7),
+                new Edge<V>(v7, v8)
+        ));
+    }
+
+    @Test
+    void testContainsEdge() {
+        Assertions.assertTrue(tree.addVertex(v1));
+        Assertions.assertTrue(tree.addEdge(v1, v2));
+        Assertions.assertTrue(tree.addEdge(v2, v3));
+        Assertions.assertTrue(tree.addEdge(v3, v4));
+        Assertions.assertTrue(tree.addEdge(v1, v5));
+        Assertions.assertTrue(tree.addEdge(v5, v7));
+        Assertions.assertTrue(tree.addEdge(v5, v6));
+        Assertions.assertTrue(tree.addEdge(v7, v8));
+
+        Assertions.assertTrue(tree.containsEdge(v1, v2));
+        Assertions.assertFalse(tree.containsEdge(v2, v1));
+        Assertions.assertFalse(tree.containsEdge(v2, v8));
     }
 }

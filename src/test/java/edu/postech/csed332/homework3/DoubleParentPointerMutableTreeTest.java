@@ -1,6 +1,10 @@
 package edu.postech.csed332.homework3;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Field;
 
 public class DoubleParentPointerMutableTreeTest extends AbstractMutableTreeTest<Double, ParentPointerTree<Double>> {
 
@@ -22,6 +26,35 @@ public class DoubleParentPointerMutableTreeTest extends AbstractMutableTreeTest<
         return tree.checkInv();
     }
 
-    // TODO: write more white-box test cases to achieve more code coverage, if needed.
-    // You do not need to add more test methods, if you tests already meet the desired coverage.
+    @Test
+    void testCheckInvNotReachable() throws NoSuchFieldException, IllegalAccessException {
+        tree = new ParentPointerTree<>();
+
+        Field nodeMapField = tree.getClass().getDeclaredField("root");
+        nodeMapField.setAccessible(true);
+
+        tree.addVertex(v1);
+        tree.addEdge(v1, v2);
+
+        nodeMapField.set(tree, null);
+
+        tree.addVertex(v3);
+
+        Assertions.assertFalse(checkInv());
+    }
+
+    @Test
+    void testCheckInvEdgeTargetRoot() throws NoSuchFieldException, IllegalAccessException {
+        tree = new ParentPointerTree<>();
+
+        Field nodeMapField = tree.getClass().getDeclaredField("root");
+        nodeMapField.setAccessible(true);
+
+        tree.addVertex(v1);
+        tree.addEdge(v1, v2);
+
+        nodeMapField.set(tree, v2);
+
+        Assertions.assertFalse(checkInv());
+    }
 }

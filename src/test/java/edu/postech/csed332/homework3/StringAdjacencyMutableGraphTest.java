@@ -1,6 +1,13 @@
 package edu.postech.csed332.homework3;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Field;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
 
 public class StringAdjacencyMutableGraphTest extends AbstractMutableGraphTest<String, AdjacencyListGraph<String>> {
 
@@ -22,6 +29,19 @@ public class StringAdjacencyMutableGraphTest extends AbstractMutableGraphTest<St
         return graph.checkInv();
     }
 
-    // TODO: write more white-box test cases to achieve more code coverage, if needed.
-    // You do not need to add more test methods, if you tests already meet the desired coverage.
+    @Test
+    void testCheckInvEdgeWithUnregistered() throws NoSuchFieldException, IllegalAccessException {
+        graph = new AdjacencyListGraph<>();
+
+        Field graphField = graph.getClass().getDeclaredField("adjMap");
+        graphField.setAccessible(true);
+
+        SortedMap<String, SortedSet<String>> adjMap = new TreeMap<>();
+        graphField.set(graph, adjMap);
+
+        graph.addVertex(v1);
+        adjMap.get(v1).add(v8);
+
+        Assertions.assertFalse(checkInv());
+    }
 }

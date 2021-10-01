@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
+import java.util.*;
+
 public class IntegerDelegateMutableTreeTest extends AbstractMutableTreeTest<Integer, DelegateTree<Integer>> {
 
     @BeforeEach
@@ -32,6 +35,36 @@ public class IntegerDelegateMutableTreeTest extends AbstractMutableTreeTest<Inte
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             tree = new DelegateTree<>(graph);
         });
+    }
+
+    @Test
+    void testCheckInvEdgeWithUnregistered() throws NoSuchFieldException, IllegalAccessException {
+        MutableGraph<Integer> graph = new AdjacencyListGraph<>();
+
+        Field graphField = graph.getClass().getDeclaredField("adjMap");
+        graphField.setAccessible(true);
+
+        SortedMap<Integer, SortedSet<Integer>> adjMap = new TreeMap<>();
+        graphField.set(graph, adjMap);
+
+        tree = new DelegateTree<>(graph);
+
+        tree.addVertex(v1);
+        adjMap.get(v1).add(v2);
+
+        Assertions.assertFalse(checkInv());
+
+        tree.addEdge(v1, v2);
+        Assertions.assertTrue(checkInv());
+
+        adjMap.put(v3, new TreeSet<>(Set.of(v1)));
+        Assertions.assertFalse(checkInv());
+
+        adjMap.remove(v3);
+        Assertions.assertTrue(checkInv());
+
+        adjMap.put(v4, new TreeSet<>(Set.of(v5)));
+        Assertions.assertFalse(checkInv());
     }
 
     @Test
