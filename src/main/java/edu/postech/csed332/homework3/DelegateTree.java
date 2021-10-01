@@ -30,6 +30,25 @@ public class DelegateTree<N extends Comparable<N>> implements MutableTree<N> {
      */
     private final @NotNull Map<N, Integer> depthMap;
 
+    /*
+     * Abstraction Function:
+     *   AF(r) = a matrix, M, such that,
+     *     M_{i,j} = (Edge (i, j) exists) ? 1 : 0
+     *     where v1 = 1, v2 = 2, ...
+     *   (*) Note that M is upper triangular matrix of which diagonal entries are zero.
+     */
+
+    /*
+     * Class Invariant:
+     *   - AF(r) is upper triangular matrix of which diagonal entries are zero.
+     *   - delegate is not null.
+     *   - depthMap is not null.
+     *   - There's no edge targeting root.
+     *   - All vertices must be reached from root.
+     *   - All vertices must have only one parent.
+     *   - All edges must consist of existing vertices.
+     */
+
     /**
      * Creates an empty tree that delegates to a given graph.
      *
@@ -46,80 +65,114 @@ public class DelegateTree<N extends Comparable<N>> implements MutableTree<N> {
 
     @Override
     public @NotNull Optional<N> getRoot() {
-        // TODO: implement this
-        return Optional.empty();
+        return root == null ? Optional.empty() : Optional.of(root);
     }
 
     @Override
     public int getDepth(@NotNull N vertex) {
-        // TODO: implement this
-        return 0;
+        if (getRoot().isEmpty()) {
+            throw new IllegalStateException();
+        } else if (!delegate.containsVertex(vertex)) {
+            throw new IllegalArgumentException();
+        }
+
+        return depthMap.get(vertex);
     }
 
     @Override
     public int getHeight() {
-        // TODO: implement this
-        return 0;
+        if (getRoot().isEmpty()) {
+            throw new IllegalStateException();
+        }
+        return Collections.max(depthMap.entrySet(), Map.Entry.comparingByValue()).getValue();
     }
 
     @Override
     public boolean containsVertex(@NotNull N vertex) {
-        // TODO: implement this
-        return false;
+        return delegate.containsVertex(vertex);
     }
 
     @Override
     public boolean addVertex(@NotNull N vertex) {
-        // TODO: implement this
-        return false;
+        if (getRoot().isEmpty()) {
+            delegate.addVertex(vertex);
+            depthMap.put(vertex, 0);
+            root = vertex;
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean removeVertex(@NotNull N vertex) {
-        // TODO: implement this
-        return false;
+        if (delegate.containsVertex(vertex)) {
+            removeVertexRecursive(vertex);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void removeVertexRecursive(@NotNull N vertex) {
+        for (N v : delegate.getTargets(vertex)) {
+            removeVertexRecursive(v);
+        }
+
+        delegate.removeVertex(vertex);
+        depthMap.remove(vertex);
+
+        if (root == vertex) {
+            root = null;
+        }
     }
 
     @Override
     public boolean containsEdge(@NotNull N source, @NotNull N target) {
-        // TODO: implement this
-        return false;
+        return delegate.containsEdge(source, target);
     }
 
     @Override
     public boolean addEdge(@NotNull N source, @NotNull N target) {
-        // TODO: implement this
-        return false;
+        if (delegate.containsVertex(source) && !delegate.containsVertex(target)) {
+            delegate.addEdge(source, target);
+            depthMap.put(target, depthMap.get(source) + 1);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean removeEdge(@NotNull N source, @NotNull N target) {
-        // TODO: implement this
-        return false;
+        if (containsEdge(source, target)) {
+            removeVertexRecursive(target);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public @NotNull Set<N> getSources(N target) {
-        // TODO: implement this
-        return Collections.emptySet();
+        return Collections.unmodifiableSet(delegate.getSources(target));
     }
 
     @Override
     public @NotNull Set<N> getTargets(N source) {
-        // TODO: implement this
-        return Collections.emptySet();
+        return Collections.unmodifiableSet(delegate.getTargets(source));
     }
 
     @Override
     public @NotNull Set<N> getVertices() {
-        // TODO: implement this
-        return Collections.emptySet();
+        return Collections.unmodifiableSet(delegate.getVertices());
     }
 
     @Override
     public @NotNull Set<Edge<N>> getEdges() {
-        // TODO: implement this
-        return Collections.emptySet();
+        return Collections.unmodifiableSet(delegate.getEdges());
     }
 
     /**
@@ -128,8 +181,33 @@ public class DelegateTree<N extends Comparable<N>> implements MutableTree<N> {
      * @return true if the representation of this tree is valid
      */
     boolean checkInv() {
-        // TODO: implement this
-        return false;
+        Set<N> vertices = getVertices();
+        Set<Edge<N>> edges = getEdges();
+
+        for(Edge<N> e : edges) {
+            N s = e.getSource();
+            N t = e.getTarget();
+
+            if ((!vertices.contains(s)) || (!vertices.contains(t))) {
+                return false;
+            }
+
+            if (t == root) {
+                return false;
+            }
+
+            if (root != null && !delegate.findReachableVertices(root).equals(getVertices())) {
+                return false;
+            }
+        }
+
+        for(N n : vertices) {
+            if (getSources(n).size() != 1) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
