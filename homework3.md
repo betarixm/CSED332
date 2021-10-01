@@ -35,8 +35,10 @@ boolean containsVertex(N vertex);
 boolean containsEdge(N source, N target);
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires: `source` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$,  `target` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$
+- ensures: 
+  - returns true if $`(\mathsf{source}, \mathsf{target}) \in E_{this}`$
+  - returns false, otherwise.
 
 ##### getSources
 
@@ -44,8 +46,10 @@ boolean containsEdge(N source, N target);
 Set<N> getSources(N target);
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires: `target` is in $`\mathcal{N}`$, not $`\mathsf{null}`$, and in $`V_{this}`$. 
+- ensures: 
+  - returns set of $`v_i`$, where $`v_i \in V_{this}`$ and $`(v_i, \mathsf{target}) \in E_{this}`$.
+    - If there is no $`v_i`$ that meets the conditions, it may be an empty set.
 
 ##### getTargets
 
@@ -53,8 +57,10 @@ Set<N> getSources(N target);
 Set<N> getTargets(N source);
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires: `source` is in $`\mathcal{N}`$, not $`\mathsf{null}`$, and in $`V_{this}`$. 
+- ensures:
+  - returns set of $`v_i`$, where $`v_i \in V_{this}`$ and $`(\mathsf{source}, v_i) \in E_{this}`$.
+    - If there is no $`v_i`$ that meets the conditions, it may be an empty set.
 
 
 ## `Tree<N>`
@@ -63,7 +69,14 @@ Let $`T_{this} = (V_{this}, E_{this}, \hat{v}_{this})`$ be an abstract value of 
 
 ##### Class invariant 
 
-<!-- TODO -->
+```math
+\ v, w \in V_{this}, \textsf{ for all } (v, w) \in E_{this} \\
+(v_i, \hat{v}_{this}) \notin E_{this}, \textsf{ for all } v_i \in V_{this} \\
+|\{v_j | (v_j, v_i) \in E_{this} \textsf { where } v_j \in V_{this}\}| = 1, \textsf{ for all } v_i \in V_{this} \\
+|\{{p_0, p_1, \cdots, p_k | (p_i, p_{i+1}) \in E_{this}, 0 \leq i < k}\}| = 1 \textsf{ where } p_0 = \hat{v}_{this}, p_k = v_i, \textsf{ for all } v_i \in V_{this}
+```
+
+
 
 ##### getDepth
 
@@ -84,8 +97,10 @@ int getDepth(N vertex);
 int getHeight();
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires: 
+  - getRoot.isPresent()
+- ensures:  
+  - returns the maximum depth in this tree.
 
 ##### getRoot
 
@@ -93,8 +108,11 @@ int getHeight();
 Optional<N> getRoot();
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires: 
+  - N/A
+- ensures: 
+  - returns the root of this tree if tree is not empty.
+  - returns `Optional.empty()` if tree is empty
 
 ##### getParent
 
@@ -102,8 +120,14 @@ Optional<N> getRoot();
 Optional<N> getParent(N vertex);
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires:
+  - vertex is in $`\mathcal{N}`$ and not $`\mathsf{null}`$; and
+  - getRoot.isPresent()
+- ensures: 
+  - returns `Optional.empty()` if `vertex` is root
+  - returns $`v`$ where $`(v, \textsf{vertex}) \in E_{this}`$ if `vertex` is not root
+
+
 
 
 ## `MutableGraph<N>`
@@ -136,8 +160,13 @@ boolean addVertex(N vertex);
 boolean removeVertex(N vertex);
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires: `vertex` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$
+- ensures: 
+  - $`V_{next} = V_{this} \setminus \{\textsf{vertex}\}`$
+  - $`E_{next} = E_{this} \setminus \{(v, w) | (v=\textsf{vertex}, w\in V_{this}) \or (w=\textsf{vertex}, v\in V_{this}) \}`$
+  - If $`G_{this}`$ satisfies the class invariant, $`G_{next}`$ also satisfies the class invariant; and
+  - returns true if $`\textsf{vertex} \in V_{this}`$
+  - returns false, otherwise.
 
 ##### addEdge
 
@@ -145,8 +174,16 @@ boolean removeVertex(N vertex);
 boolean addEdge(N source, N target);
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires: 
+  - `source` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$
+  - `target` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$
+- ensures: 
+  - $`\textsf{source} \in V_{next}`$
+  - $`\textsf{target} \in V_{next}`$
+  - $`(\textsf{source}, \textsf{target}) \in E_{next}`$
+  - If $`G_{this}`$ satisfies the class invariant, $`G_{next}`$ also satisfies the class invariant; and
+  - returns false if $`(\textsf{source}, \textsf{target}) \in E_{this}`$
+  - returns true, otherwise.
 
 ##### removeEdge
 
@@ -154,19 +191,30 @@ boolean addEdge(N source, N target);
 boolean removeEdge(N source, N target);
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires:
+  - `source` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$
+  - `target` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$
+- ensures: 
+  - $`(\textsf{source}, \textsf{target}) \notin E_{next}`$
+  - returns true if $`(\textsf{source}, \textsf{target}) \in E_{this}`$
+  - returns false, otherwise.
 
 
 ## `MutableTree<N>`
-
 
 Let $`T_{this} = (V_{this}, E_{this}, \hat{v}_{this})`$ be an abstract value of the current tree object,
 and $`T_{next} = (V_{next}, E_{next}, \hat{v}_{next})`$ be an abstract value of the tree object _modified by_ the method call. 
 
 ##### Class invariant 
 
-<!-- TODO -->
+```math 
+\ v, w \in V_{this}, \textsf{ for all } (v, w) \in E_{this} \\
+(v_i, \hat{v}_{this}) \notin E_{this}, \textsf{ for all } v_i \in V_{this} \\
+|\{v_j | (v_j, v_i) \in E_{this} \textsf { where } v_j \in V_{this}\}| = 1, \textsf{ for all } v_i \in V_{this} \\
+|\{{p_0, p_1, \cdots, p_k | (p_i, p_{i+1}) \in E_{this}, 0 \leq i < k}\}| = 1 \textsf{ where } p_0 = \hat{v}_{this}, p_k = v_i, \textsf{ for all } v_i \in V_{this}
+```
+
+
 
 ##### addVertex
 
@@ -174,8 +222,13 @@ and $`T_{next} = (V_{next}, E_{next}, \hat{v}_{next})`$ be an abstract value of 
 boolean addVertex(N vertex);
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires: `vertex` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$
+- ensures:  
+  - If this $`T_{this}`$ is empty,
+    - $`\hat{v}_{next} = \textsf{vertex}`$ 
+    - return true
+  - else,
+    - return false
 
 ##### removeVertex
 
@@ -183,8 +236,14 @@ boolean addVertex(N vertex);
 boolean removeVertex(N vertex);
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires: `vertex` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$
+- ensures: 
+  - When $W = \textbf{vertex} \cup \{v_i | v_i \textsf{ reachable from }\textbf{vertex}\}$,
+  - $`V_{next} = V_{this} \setminus W`$
+  - $`E_{next} = E_{this} \setminus \{(v, w) | (v \in W, w\in V_{this}) \or (w \in W, v\in V_{this}) \}`$
+  - If $`T_{this}`$ satisfies the class invariant, $`T_{next}`$ also satisfies the class invariant; and
+  - returns true if $`\textsf{vertex} \in V_{this}`$
+  - returns false, otherwise.
 
 ##### addEdge
 
@@ -192,8 +251,17 @@ boolean removeVertex(N vertex);
 boolean addEdge(N source, N target);
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires:
+  - `source` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$
+  - `target` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$
+- ensures:
+  - if $`\textsf{source} \in V_{this}`$, $`\textsf{target} \notin V_{this}`$,
+    - $`V_{next} = V_{this} \cup \textsf{target}`$
+    - $`E_{next} = E_{this} \cup (\textsf{source}, \textsf{target})`$
+    - If $`T_{this}`$ satisfies the class invariant, $`T_{next}`$ also satisfies the class invariant; and
+    - returns true
+  - Else,
+    - returns false
 
 ##### removeEdge
 
@@ -201,8 +269,20 @@ boolean addEdge(N source, N target);
 boolean removeEdge(N source, N target);
 ```
 
-- requires: <!-- TODO -->
-- ensures:  <!-- TODO -->
+- requires:
+  - `source` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$
+  - `target` is in $`\mathcal{N}`$ and not $`\mathsf{null}`$
+- ensures: 
+  - If $`(\textsf{source}, \textsf{target}) \in E_{this}`$
+    - When $`W = \textbf{target} \cup \{v_i | v_i \textsf{ reachable from }\textbf{target}\}`$, 
+    - $`V_{next} = V_{this} \setminus W`$
+    - $`E_{next} = E_{this} \setminus \{(v, w) | (v \in W, w\in V_{this}) \or (w \in W, v\in V_{this}) \}`$
+    - returns true
+  - Else,
+    - returns false
+  - If $`T_{this}`$ satisfies the class invariant, $`T_{next}`$ also satisfies the class invariant
+
+
 
 
 # Problem 2
