@@ -37,6 +37,23 @@ public class ParentPointerTree<N extends Comparable<N>> implements MutableTree<N
      */
     private final @NotNull SortedMap<N, Node<N>> nodeMap;
 
+    /*
+     * Abstraction Function:
+     *   AF(r) = a matrix, M, such that,
+     *     M_{i,j} = (If j is parent of i) ? depth of i : 0
+     *     where v1 = 1, v2 = 2, ...
+     */
+
+    /*
+     * Class Invariant:
+     *   - delegate is not null.
+     *   - depthMap is not null.
+     *   - There's no edge targeting root.
+     *   - All vertices must be reached from root.
+     *   - All vertices must have only one parent.
+     *   - All edges must consist of existing vertices.
+     */
+
     /**
      * Creates an empty parent pointer tree.
      */
