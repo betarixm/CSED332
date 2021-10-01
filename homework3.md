@@ -294,19 +294,36 @@ For each question, explain your reasoning _using the abstract specifications tha
 ##### `Tree<N>` and `Graph<N>`
 
 * Is `Tree<N>` a subtype of `Graph<N>`?
-<!-- TODO -->
+* **Yes.** `Tree<N>`은 `Graph<N>`의 invariant에 비해, (1) root vertex가 존재하고, (2)  root를 제외한 모든 vertex가 하나의 parent를 가지며, (3) 모든 vertex가 root로 부터 접근 가능하다는 invariant가 추가적으로 존재한다. 또한, `getDepth`, `getHeight`, `getRoot`, `getParent`에 대한 precondition들과 postcondition들이 추가적으로 필요하다. 즉, `Tree<N>` 이 더 strong하게 정의되므로, `Graph<N>`의 subtype이라고 말할 수 있다.
 
 ##### `MutableGraph<N>` and `Graph<N>`
 
 * Is `MutableGraph<N>` a subtype of `Graph<N>`
-<!-- TODO -->
+* **Yes.** `MutableGraph<N>` 은 `Graph<N>`에 비해 `addVertex`, `removeVertex`, `addEdge`, `removeEdge` 에 대한  대한 precondition들과 postcondition들이 추가적으로 필요하다. 즉, `MutableGraph<N>` 이 더 strong하게 정의되므로, `Graph<N>`의 subtype이라고 말할 수 있다.
 
 ##### `MutableTree<N>` and `Tree<N>`
 
 * Is `MutableTree<N>` a subtype of `Tree<N>`
-<!-- TODO -->
+  * **Yes.** `MutableTree<N>` 은 `Tree<N>`에 비해 `addVertex`, `removeVertex`, `addEdge`, `removeEdge` 에 대한  대한 precondition들과 postcondition들이 추가적으로 필요하다. 즉, `MutableTree<N>` 이 더 strong하게 정의되므로, `Tree<N>`의 subtype이라고 말할 수 있다.
 
 ##### `MutableTree<N>` and `MutableGraph<N>`
 
 * Is `MutableTree<N>` a subtype of `MutableGraph<N>`
-<!-- TODO -->
+
+  * **No.** 
+
+    * **(i)** $`S, T \in V, (S,T) \notin E`$ 일때, `MutableTree<N>`의 `addEdge` 는 `false` 를 반환하지만, `MutableGraph<N>` 의 `addEdge` 는 `true` 를 반환한다. 즉, 둘의 동작이 다르기 때문에 Liskov substituiton principle을 위반한 것으로 해석된다.
+
+    * **(ii)** 아래 코드 예시에서, `graph.removeVertex(v3);` 이 호출되면 `v3` 만이 삭제되지만,  `MutableTree<N>` 에서는 `v3`, `v4`, `v5` 가 삭제되어 다른 행동을 보인다.
+
+      ```java
+      MutableGraph<V> graph;
+      V v1, v2, v3, v4, v5;
+      
+      graph.addEdge(v1, v2);
+      graph.addEdge(v2, v3);
+      graph.addEdge(v3, v4);
+      graph.addEdge(v4, v5);
+      
+      graph.removeVertex(v3);
+      ```
