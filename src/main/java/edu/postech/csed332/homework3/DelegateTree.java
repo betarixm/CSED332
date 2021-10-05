@@ -33,8 +33,8 @@ public class DelegateTree<N extends Comparable<N>> implements MutableTree<N> {
     /*
      * Abstraction Function:
      *   AF(r) = a matrix, M, such that,
-     *     M_{i,j} = (Edge (i, j) exists) ? 1 : 0
-     *     where v1 = 1, v2 = 2, ...
+     *     M_{i,j} = (r.delegate.adjMap.get(v_i).contains(v_j)) ? 1 : 0
+     *     where i = 1, 2, ... ; j = 1, 2, ...
      */
 
     /*
@@ -45,6 +45,7 @@ public class DelegateTree<N extends Comparable<N>> implements MutableTree<N> {
      *   - All vertices must be reached from root.
      *   - All vertices must have only one parent.
      *   - All edges must consist of existing vertices.
+     *   - This class satisfies MutableTree's class invariant. (problem 1)
      */
 
     /**

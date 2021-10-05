@@ -23,8 +23,8 @@ public class AdjacencyListGraph<N extends Comparable<N>> implements MutableGraph
     /*
      * Abstraction Function:
      *   AF(r) = a matrix, M, such that,
-     *     M_{i,j} = (Edge (i, j) exists) ? 1 : 0
-     *     where v1 = 1, v2 = 2, ...
+     *     M_{i,j} = (r.adjMap.get(v_i).contains(v_j)) ? 1 : 0
+     *     where i = 1, 2, ... ; j = 1, 2, ...
      */
 
     /*
@@ -32,6 +32,7 @@ public class AdjacencyListGraph<N extends Comparable<N>> implements MutableGraph
      *   - adjMap is not null.
      *   - adjMap does not have duplicate keys.
      *   - adjMap's each value (SortedSet<N>) consists only of vertices in the key-set.
+     *   - This class satisfies MutableGraph's class invariant. (problem 1)
      */
 
     /**

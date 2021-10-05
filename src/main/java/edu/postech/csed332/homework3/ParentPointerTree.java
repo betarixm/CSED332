@@ -40,18 +40,20 @@ public class ParentPointerTree<N extends Comparable<N>> implements MutableTree<N
     /*
      * Abstraction Function:
      *   AF(r) = a matrix, M, such that,
-     *     M_{i,j} = (If j is parent of i) ? depth of i : 0
-     *     where v1 = 1, v2 = 2, ...
+     *     M_{i,j} = (r.containsEdge(v_i, v_j)) ? r.getDepth(v_j) : 0
+     *     where i = 1, 2, ... ; j = 1, 2, ...
      */
 
     /*
      * Class Invariant:
-     *   - delegate is not null.
-     *   - depthMap is not null.
+     *   - nodeMap is not null.
      *   - There's no edge targeting root.
+     *   - class Node.depth should be greater than or equal to 0.
+     *   - class Node.parent should be in V or null.
      *   - All vertices must be reached from root.
      *   - All vertices must have only one parent.
      *   - All edges must consist of existing vertices.
+     *   - This class satisfies MutableTree's class invariant. (problem 1)
      */
 
     /**
