@@ -76,9 +76,9 @@ $\textcolor{blue}{\{m=max(A[0],A[1],...,A[N−1])\}}$
 
 Write a Hoare logic proof (decorated program) to show that the given Hoare triple holds and the program always terminates (hint: what is a ranking function?).
 
-$\{x\geq 0 \and y > 0\}$
+$\textcolor{blue}{\{x\geq 0 \and y > 0\}}$
 
-<pre style="font-family: monospace">
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
 int r = x;
 int q = 0;
 while (y <= r) {
@@ -87,11 +87,46 @@ while (y <= r) {
 }
 </pre>
 
-$\{x= qy + r \and 0 \leq r < y\}$
+$\textcolor{blue}{\{x= qy + r \and 0 \leq r < y\}}$
 
 
 
 #### Proof.
+
+$\textcolor{blue}{\{x\geq 0 \and y > 0\}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+int r = x;
+int q = 0;
+</pre>
+$\textcolor{blue}{\{x \geq 0 \and y> 0 \and x = qy + r\}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+while (y <= r) {
+</pre>
+$\qquad\textcolor{blue}{\{x \geq 0 \and y> 0 \and x = qy + r \and y \leq r\}\Longrightarrow}$
+
+$\qquad \textcolor{blue}{\{x \geq 0 \and y> 0 \and x = (q + 1) y + (r-y) \and y \leq r\}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+    r = r - y;
+</pre>
+$\qquad \textcolor{blue}{\{x \geq 0 \and y> 0 \and x = (q + 1) y + r \and 0 \leq r\}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+    q = q + 1;
+</pre>
+
+$\qquad \textcolor{blue}{\{x \geq 0 \and y> 0 \and x = qy + r \and 0 \leq r\}}$
+
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+}
+</pre>
+
+$\textcolor{blue}{\{x \geq 0 \and y> 0 \and x = qy + r \and 0 \leq r \and r < y\}\Longrightarrow}$
+
+$\textcolor{blue}{\{x= qy + r \and 0 \leq r < y\}}$
 
 
 
