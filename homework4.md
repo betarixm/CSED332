@@ -134,11 +134,11 @@ $\textcolor{blue}{\{x= qy + r \and 0 \leq r < y\}}$
 
 ## Problem 3
 
-Consider the following program for sorting an array. Write a Hoare logic proof to prove the given Hoare triple, where $sorted(a_1,a_2,...,a_k)$ means $a1 \leq a2 \leq ··· \leq ak$.
+Consider the following program for sorting an array. Write a Hoare logic proof to prove the given Hoare triple, where $sorted(a_1,a_2,...,a_k)$ means $a_1 \leq a_2 \leq ··· \leq a_k$.
 
-$\{0 \leq N\}$
+$\textcolor{blue}{\{0 \leq N\}}$
 
-<pre style="font-family: monospace">
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
 int i = 1;
 while (i < N) {
     int j = i;
@@ -152,9 +152,99 @@ while (i < N) {
 }
 </pre>
 
-$\{sorted (A[0], A[1], A[2], . . . , A[N − 1])\}$
+$\textcolor{blue}{\{sorted (A[0], A[1], A[2], . . . , A[N − 1])\}}$
+
+
+
+#### Prerequisite.
+
+$$
+\begin{align*}
+S(a, b) &= \begin{cases}
+sorted(A[a], \cdots, A[b]), &\text{if } 0 \leq a \leq b < N \\
+\{\}, &\text{otherwise.}
+\end{cases} \\
+L(a, b) &= \begin{cases}
+\{A[a], \cdots A[b]\}, &\text{if } 0 \leq a \leq b < N \\
+\{\}, &\text{otherwise.}
+\end{cases} \\
+R &= \text{(WLOG) Remaining part of A}
+\end{align*}
+$$
 
 
 
 #### Proof.
+
+$\textcolor{blue}{\{0 \leq N\}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+int i = 1;
+</pre>
+$\textcolor{blue}{\{0 \leq N \and i \geq 1 \and A = sorted(A[0]) + \{A[1], \cdots, A[N-1]\}\} \Longrightarrow}$
+
+$\textcolor{blue}{\{0 \leq N \and i \geq 1 \and A = sorted(A[0], \cdots , A[i-1]) + \{A[i], \cdots, A[N-1]\}\}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+while (i < N) {
+</pre>
+$\qquad\textcolor{blue}{\{0 \leq N \and i \geq 1 \and A = sorted(A[0], \cdots , A[i-1]) + \{A[i], \cdots, A[N-1]\} \and i < N\} \Longrightarrow}$
+
+$\qquad\textcolor{blue}{\{0 \leq N \and 1 \leq i < N \and A = sorted(A[0], \cdots , A[i-1]) + \{A[i], \cdots, A[N-1]\}\} \Longrightarrow}$
+
+$\qquad\textcolor{blue}{\{0 \leq N \and 1 \leq i + 1 \leq N \and A = sorted(A[0], \cdots , A[(i+1)-2]) + \{A[(i+1) - 1], \cdots, A[N-1]\}\} \Longrightarrow}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+    int j = i;
+</pre>
+$\qquad\textcolor{blue}{\{0 \leq N \and 1 \leq i + 1 \leq N \and A = sorted(A[0], \cdots , A[(i+1)-2]) + \{A[(i+1) - 1], \cdots, A[N-1]\} \and j \leq i\} \Longrightarrow}$
+
+$\qquad\textcolor{blue}{\begin{align*}\{0 \leq N &\and 1 \leq i + 1 \leq N \and A = S(0, j - 2) + L(j - 1, j) + S(j + 1, i-1) + R\and j \leq i \} \end{align*}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+    while (j > 0 && A[j-1] > A[j]) {
+</pre>
+$\qquad\qquad\textcolor{blue}{\begin{align*}\{0 \leq N &\and 1 \leq i + 1 \leq N \and A = S(0, j - 2) + L(j - 1, j) + S(j + 1, i-1) + R\and j \leq i \\ &\and j > 0 \and A[j-1] > A[j] \} \Longrightarrow \end{align*}}$
+
+$\qquad\qquad\textcolor{blue}{\begin{align*}\{0 \leq N &\and 1 \leq i + 1 \leq N \and A = S(0, j - 2) + L(j - 1, j) + S(j + 1, i-1) + R \\ &\and 0 \leq j - 1 \leq i \and A[j-1] > A[j] \} \end{align*}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+        int t = A[j-1];
+        A[j-1] = A[j];
+        A[j] = t;
+</pre>
+$\qquad\qquad\textcolor{blue}{\begin{align*}\{0 \leq N &\and 1 \leq i + 1 \leq N \and A = S(0, (j - 1) - 2) + L((j - 1) - 1, j - 1) + S((j - 1) + 1, i-1) + R \\ &\and 0 \leq j - 1 \leq i \and A[j-1] \leq A[j] \} \end{align*}}$
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+        j = j - 1;
+</pre>
+$\qquad\qquad\textcolor{blue}{\begin{align*}\{0 \leq N &\and 1 \leq i + 1 \leq N \and A = S(0, j - 2) + L(j - 1, j) + S(j + 1, i-1) + R \\ &\and 0 \leq j \leq i \and A[j] \leq A[j + 1] \} \end{align*}}$
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+    }
+</pre>
+
+$\qquad\textcolor{blue}{\begin{align*}\{0 \leq N &\and 1 \leq i + 1 \leq N \and A = S(0, j - 2) + L(j - 1, j) + S(j + 1, i-1) + R \and 0 \leq j \leq i \and A[j] \leq A[j + 1] \} \Longrightarrow\end{align*}}$
+
+$\qquad\textcolor{blue}{\begin{align*}\{0 \leq N &\and 1 \leq i + 1 \leq N \and A = sorted(A[0], \cdots, A[i]) + \{A[(i + 1)],\cdots, A[N-1]\} \} \Longrightarrow\end{align*}}$
+
+$\qquad\textcolor{blue}{\{0 \leq N \and 1 \leq i + 1 \leq N \and A = sorted(A[0], \cdots , A[(i + 1) - 1]) + \{A[(i + 1)],\cdots, A[N-1]\}\}}$
+
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+    i = i + 1;
+</pre>
+
+$\qquad\textcolor{blue}{\{0 \leq N \and 1 \leq i \leq N \and A = sorted(A[0], \cdots , A[i-1]) + \{A[i], A[i + 1], \cdots, A[N-1]\}\}}$
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+}
+</pre>
+
+$\textcolor{blue}{\{0 \leq N \and 1 \leq i \leq N \and A = sorted(A[0], \cdots , A[i-1]) + \{A[i], A[i + 1], \cdots, A[N-1]\} \and i \geq N\} \Longrightarrow}$
+
+$\textcolor{blue}{\{0 \leq N \and i = N \and A = sorted(A[0], \cdots , A[i-1]) + \{A[i], A[i + 1], \cdots, A[N-1]\}\} \Longrightarrow}$
+
+$\textcolor{blue}{\{0 \leq N \and i = N \and A = sorted(A[0], \cdots , A[N-1])\} \Longrightarrow}$
+
+$\textcolor{blue}{\{sorted (A[0], A[1], A[2], . . . , A[N − 1])\}}$
+
+
 
