@@ -9,8 +9,8 @@ Gwon Minjae
 Consider the following program to find the maximum value in an array. Write a Hoare logic proof (decorated program) to prove the given Hoare triple.
 
 
-$\{0 < N\}$
-<pre style="font-family: monospace">
+$\textcolor{blue}{\{0 < N\}}$
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
 int m = A[0];
 int i = 1;
 while (i < N){
@@ -22,11 +22,51 @@ while (i < N){
 }
 </pre>
 
-$\{m=max(A[0],A[1],...,A[N−1])\}$
+$\textcolor{blue}{\{m=max(A[0],A[1],...,A[N−1])\}}$
 
 
 
 #### Proof.
+
+$\textcolor{blue}{\{0 < N\}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+int m = A[0];
+int i = 1;
+</pre>
+
+$\textcolor{blue}{\{1 \leq i \leq N \and m = max(A[0])\}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+while (i < N){
+</pre>
+
+$\qquad\textcolor{blue}{\{1 \leq i \leq N \and m = max(A[0]) \and i < N\} \Longrightarrow}$
+
+$\qquad\textcolor{blue}{\{1 \leq i + 1 \leq N \and m=max(A[0])\}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+    if (A[i] > m)
+        m = A[i];
+    else
+        skip;
+</pre>
+
+$\qquad\textcolor{blue}{\{1 \leq i + 1 \leq N \and m=max(A[0], A[i])\}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+    i = i + 1;
+</pre>
+
+$\qquad\textcolor{blue}{\{1 \leq i \leq N \and m=max(A[0], A[i])\}}$
+
+<pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
+}
+</pre>
+
+$\textcolor{blue}{\{1 \leq i < N \and m=max(A[0], A[i])\}\Longrightarrow}$
+
+$\textcolor{blue}{\{m=max(A[0],A[1],...,A[N−1])\}}$
 
 
 
