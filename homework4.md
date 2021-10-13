@@ -222,8 +222,7 @@ $\qquad\qquad\textcolor{blue}{\begin{align*}\{0 \leq N &\and 1 \leq i + 1 \leq N
 <pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
     }
 </pre>
-
-$\qquad\textcolor{blue}{\begin{align*}\{0 \leq N &\and 1 \leq i + 1 \leq N \and A = S(0, j - 2) + L(j - 1, j) + S(j + 1, i-1) + R \and 0 \leq j \leq i \and A[j] \leq A[j + 1] \} \Longrightarrow\end{align*}}$
+$\qquad\textcolor{blue}{\begin{align*}\{0 \leq N &\and 1 \leq i + 1 \leq N \and A = S(0, j - 2) + L(j - 1, j) + S(j + 1, i-1) + R \\ &\and 0 \leq j \leq i \and A[j] \leq A[j + 1] \and (j \leq 0 \or A[j - 1] \leq A[j]) \} \Longrightarrow\end{align*}}$
 
 $\qquad\textcolor{blue}{\begin{align*}\{0 \leq N &\and 1 \leq i + 1 \leq N \and A = sorted(A[0], \cdots, A[i]) + \{A[(i + 1)],\cdots, A[N-1]\} \} \Longrightarrow\end{align*}}$
 
@@ -246,6 +245,5 @@ $\textcolor{blue}{\{0 \leq N \and i = N \and A = sorted(A[0], \cdots , A[i-1]) +
 $\textcolor{blue}{\{0 \leq N \and i = N \and A = sorted(A[0], \cdots , A[N-1])\} \Longrightarrow}$
 
 $\textcolor{blue}{\{sorted (A[0], A[1], A[2], . . . , A[N − 1])\}}$
-
 
 
