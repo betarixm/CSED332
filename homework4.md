@@ -35,15 +35,15 @@ int m = A[0];
 int i = 1;
 </pre>
 
-$\textcolor{blue}{\{1 \leq i \leq N \and m = max(A[0])\}}$
+$\textcolor{blue}{\{i = 1 \and m = max(A[0], \cdots, A[i-1])\}}$
 
 <pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
 while (i < N){
 </pre>
 
-$\qquad\textcolor{blue}{\{1 \leq i \leq N \and m = max(A[0]) \and i < N\} \Longrightarrow}$
+$\qquad\textcolor{blue}{\{1 \leq i < N \and m = max(A[0], \cdots, A[i-1])\} \Longrightarrow}$
 
-$\qquad\textcolor{blue}{\{1 \leq i + 1 \leq N \and m=max(A[0])\}}$
+$\qquad\textcolor{blue}{\{1 \leq i + 1 \leq N \and m = max(A[0], \cdots, A[i-1])\}}$
 
 <pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
     if (A[i] > m)
@@ -52,19 +52,20 @@ $\qquad\textcolor{blue}{\{1 \leq i + 1 \leq N \and m=max(A[0])\}}$
         skip;
 </pre>
 
-$\qquad\textcolor{blue}{\{1 \leq i + 1 \leq N \and m=max(A[0], A[i])\}}$
+$\qquad\textcolor{blue}{\{1 \leq i + 1 \leq N \and m=max(A[0], \cdots, A[i])\}}$
 
 <pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
     i = i + 1;
 </pre>
 
-$\qquad\textcolor{blue}{\{1 \leq i \leq N \and m=max(A[0], A[i])\}}$
+$\qquad\textcolor{blue}{\{1 \leq i \leq N \and m=max(A[0], \cdots, A[i-1])\}}$
 
 <pre style="font-family: monospace; background-color: transparent; padding: 0; margin: 0;">
 }
 </pre>
+$\textcolor{blue}{\{1 \leq i \leq N \and m=max(A[0], \cdots, A[i-1]) \and i \geq N\} \Longrightarrow}$
 
-$\textcolor{blue}{\{1 \leq i < N \and m=max(A[0], A[i])\}\Longrightarrow}$
+$\textcolor{blue}{\{i = N \and m=max(A[0], \cdots, A[i-1])\} \Longrightarrow}$
 
 $\textcolor{blue}{\{m=max(A[0],A[1],...,A[N−1])\}}$
 
