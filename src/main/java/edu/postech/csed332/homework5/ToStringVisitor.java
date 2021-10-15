@@ -39,6 +39,6 @@ public class ToStringVisitor implements ExpVisitor<String> {
     }
 
     private String binaryStringBuilder(BinaryExp exp, String token) {
-        return "(" + exp.getLeft() + " " + token + " " + exp.getRight() + ")";
+        return "(" + exp.getLeft().accept(this) + " " + token + " " + exp.getRight().accept(this) + ")";
     }
 }
