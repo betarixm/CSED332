@@ -25,7 +25,6 @@ public class NumberExp extends Exp {
     @Override
     @NotNull
     public <T> T accept(@NotNull ExpVisitor<T> visitor) {
-        // TODO implement this
-        return null;
+        return visitor.visit(this);
     }
 }
