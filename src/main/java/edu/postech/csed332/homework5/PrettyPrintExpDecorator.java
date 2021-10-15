@@ -1,5 +1,6 @@
 package edu.postech.csed332.homework5;
 
+import edu.postech.csed332.homework5.expression.BinaryExp;
 import edu.postech.csed332.homework5.expression.Exp;
 import edu.postech.csed332.homework5.expression.NumberExp;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,12 @@ public class PrettyPrintExpDecorator extends ExpDecorator {
         ExpVisitor<String> visitor = new ToStringVisitor() {
             @Override
             public String visit(NumberExp exp) {
-                return new BigDecimal(exp.getValue().toString()).toPlainString();
+                String result = new BigDecimal(exp.getValue().toString()).toPlainString();
+
+                if (exp.getValue() < 0) {
+                    result = "(" + result + ")";
+                }
+                return result;
             }
         };
 
