@@ -1,6 +1,7 @@
 package edu.postech.csed332.homework5;
 
 import edu.postech.csed332.homework5.expression.Exp;
+import edu.postech.csed332.homework5.expression.VariableExp;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -20,7 +21,13 @@ public class DefaultValueExpDecorator extends ExpDecorator {
     @Override
     @NotNull
     public Double eval(@NotNull Map<Integer, Double> valuation) {
-        // TODO implement this
-        return null;
+        EvaluationVisitor visitor = new EvaluationVisitor(valuation) {
+            @Override
+            public Double visit(VariableExp exp) {
+                return valuation.getOrDefault(exp.getName(), defaultValue);
+            }
+        };
+
+        return this.accept(visitor);
     }
 }
