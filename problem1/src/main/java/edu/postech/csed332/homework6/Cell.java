@@ -14,6 +14,11 @@ import java.util.Optional;
  */
 public class Cell extends Subject {
     enum Type {EVEN, ODD}
+    Type _type;
+    Integer _value;
+    BitSet _possibilities;
+
+
 
     //TODO: add private member variables for Board
 
@@ -23,7 +28,12 @@ public class Cell extends Subject {
      * @param type EVEN or ODD
      */
     public Cell(@NotNull Type type) {
-        //TODO: implement this
+        this._type = type;
+        this._possibilities = new BitSet(10); // 0 is not used, only use 1-9
+        for(int i=1; i<=9; i++){
+            if((i%2) == type.ordinal())
+                _possibilities.set(i);
+        }
     }
 
     /**
@@ -33,8 +43,7 @@ public class Cell extends Subject {
      */
     @NotNull
     public Type getType() {
-        //TODO: implement this
-        return null;
+        return _type;
     }
 
     /**
@@ -44,8 +53,10 @@ public class Cell extends Subject {
      */
     @NotNull
     public Optional<Integer> getNumber() {
-        //TODO: implement this
-        return Optional.empty();
+        if(_value != null)
+            return Optional.of(_value);
+        else
+            return Optional.empty();
     }
 
     /**
@@ -55,14 +66,22 @@ public class Cell extends Subject {
      * @param number the number
      */
     public void setNumber(int number) {
-        //TODO: implement this
+        if (_value != null && containsPossibility(number))
+        {
+            _value = number;
+            notifyObservers(new SetNumberEvent(number));
+            _possibilities.clear();
+
+        }
+        //TODO : what if we can't set number in this cell?
     }
 
     /**
      * Removes the number of this cell and notifies an UnsetNumberEvent, provided that the cell has a number.
      */
     public void unsetNumber() {
-        //TODO: implement this
+        notifyObservers(new UnsetNumberEvent(_value));
+        _value = null;
     }
 
     /**
@@ -84,8 +103,8 @@ public class Cell extends Subject {
      */
     @NotNull
     public Boolean containsPossibility(int n) {
-        //TODO: implement this
-        return null;
+
+        return _possibilities.get(n);
     }
 
     /**
@@ -95,8 +114,8 @@ public class Cell extends Subject {
      */
     @NotNull
     public Boolean emptyPossibility() {
-        //TODO: implement this
-        return null;
+
+        return _possibilities.isEmpty();
     }
 
     /**
@@ -108,7 +127,13 @@ public class Cell extends Subject {
      * @param number the number
      */
     public void addPossibility(int number) {
-        //TODO: implement this
+        if ((number%2) == _type.ordinal()){
+            if(emptyPossibility())
+                notifyObservers(new EnabledEvent());
+            _possibilities.set(number);
+        }
+        //TODO : should we check input number is already used by another cell in the same group?
+        // how? should Cell have groups by attribute?
     }
 
     /*
@@ -118,6 +143,10 @@ public class Cell extends Subject {
      * @param number the number
      */
     public void removePossibility(int number) {
-        //TODO: implement this
+        if ((number%2) == _type.ordinal()){
+            _possibilities.clear(number);
+            if(emptyPossibility())
+                notifyObservers(new DisabledEvent());
+        }
     }
 }
