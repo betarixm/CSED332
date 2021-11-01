@@ -12,6 +12,10 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.security.Key;
+
 public class CellUI extends JTextField implements Observer {
 
     /**
@@ -24,6 +28,36 @@ public class CellUI extends JTextField implements Observer {
         initCellUI(cell);
 
         if (cell.getNumber().isEmpty()) {
+            addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char key = e.getKeyChar();
+                    if (('1' <= key) && (key <= '9') && cell.containsPossibility(key - '0')) {
+                        cell.setNumber(key - '0');
+                    } else if (key == KeyEvent.VK_BACK_SPACE) {
+                        if (getText().isEmpty()) {
+                            cell.unsetNumber();
+                            setText("");
+                        } else {
+                            cell.setNumber(Integer.parseInt(getText()));
+                        }
+                    } else {
+                        cell.unsetNumber();
+                        setText("");
+                    }
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+
+                }
+
+            });
             getDocument().addDocumentListener(new DocumentListener() {
                 @Override
                 public void insertUpdate(DocumentEvent e) {
