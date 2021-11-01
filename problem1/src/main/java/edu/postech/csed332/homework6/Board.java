@@ -1,6 +1,7 @@
 package edu.postech.csed332.homework6;
 
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,28 +26,33 @@ public class Board {
         rowSet = new Group[9];
         colSet = new Group[9];
         squareSet = new Group[9];
-        System.out.println("oh?");
 
-        for(i=0; i<9; i++){
+        for (i = 0; i < rowSet.length; i++) {
             rowSet[i] = new Group();
             colSet[i] = new Group();
             squareSet[i] = new Group();
         }
-        System.out.println("group making complete");
-        for(i=0; i<9; i++){
-            for(j=0; j<9; j++) {
-                System.out.println(i);
-                number = game.getNumbers(i, j).orElse(0);
-                Cell.Type type = game.isEven(i, j) ? Cell.Type.EVEN : Cell.Type.ODD;
 
+        for (i = 0; i < cells.length; i++) {
+            for (j = 0; j < cells[i].length; j++) {
+                Cell.Type type = game.isEven(i, j) ? Cell.Type.EVEN : Cell.Type.ODD;
                 Cell cell = new Cell(type);
-                if (number > 0)
-                    cell.setNumber(number);
 
                 cells[i][j] = cell;
                 rowSet[i].addCell(cell);
                 colSet[j].addCell(cell);
-                squareSet[(i/3)*3 + j/3].addCell(cell);
+                squareSet[(i / 3) * 3 + j / 3].addCell(cell);
+            }
+        }
+
+        for (i = 0; i < cells.length; i++) {
+            for (j = 0; j < cells[i].length; j++) {
+                Cell cell = getCell(i, j);
+                number = game.getNumbers(i, j).orElse(0);
+
+                if (number > 0) {
+                    cell.setNumber(number);
+                }
             }
         }
     }
@@ -94,6 +100,6 @@ public class Board {
      */
     @NotNull
     Group getSquareGroup(int n, int m) {
-        return squareSet[n*3 + m];
+        return squareSet[n * 3 + m];
     }
 }
