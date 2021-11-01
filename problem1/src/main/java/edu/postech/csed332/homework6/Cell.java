@@ -69,8 +69,6 @@ public class Cell extends Subject {
         if (_value == null && containsPossibility(number)) {
             _value = number;
             notifyObservers(new SetNumberEvent(number));
-            _possibilities.clear();
-
         }
         //TODO : what if we can't set number in this cell?
     }
