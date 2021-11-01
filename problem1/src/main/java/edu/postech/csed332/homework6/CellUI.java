@@ -30,14 +30,12 @@ public class CellUI extends JTextField implements Observer {
         if (cell.getNumber().isEmpty()) {
             addKeyListener(new KeyListener() {
                 @Override
-                public void keyTyped(KeyEvent e) {
-
-                }
+                public void keyTyped(KeyEvent e) {}
 
                 @Override
                 public void keyReleased(KeyEvent e) {
                     char key = e.getKeyChar();
-                    if (('1' <= key) && (key <= '9') && cell.containsPossibility(key - '0')) {
+                    if (('1' <= key) && (key <= '9') && cell.containsPossibility(key - '0') && cell.getNumber().isEmpty()) {
                         cell.setNumber(key - '0');
                     } else if (key == KeyEvent.VK_BACK_SPACE) {
                         if (getText().isEmpty()) {
@@ -48,16 +46,12 @@ public class CellUI extends JTextField implements Observer {
                         }
                     } else {
                         setText("");
-                        System.out.println("why?");
+                        cell.unsetNumber();
                     }
-
                 }
 
                 @Override
-                public void keyPressed(KeyEvent e) {
-
-                }
-
+                public void keyPressed(KeyEvent e) {}
             });
 
         } else {
