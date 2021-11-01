@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -31,26 +32,37 @@ class ProjectTreeModelFactory {
 
         // The visitor to traverse the Java hierarchy and to construct the tree
         final var visitor = new JavaElementVisitor() {
-            // TODO: add member variables if necessary
+            MutableTreeNode curParent = root;
+
+            private void visit(PsiElement parent) {
+                MutableTreeNode parentNode = new DefaultMutableTreeNode();
+                parentNode.setUserObject(parent);
+                parentNode.setParent(curParent);
+
+                for (PsiElement e : parent.getChildren()) {
+                    curParent = parentNode;
+                    e.accept(this);
+                }
+            }
 
             @Override
             public void visitPackage(PsiPackage pack) {
-                // TODO: add a new node to the parent node, and traverse the content of the package
+                visit(pack);
             }
 
             @Override
             public void visitClass(PsiClass aClass) {
-                // TODO: add a new node the parent node, and traverse the content of the class
+                visit(aClass);
             }
 
             @Override
             public void visitMethod(PsiMethod method) {
-                // TODO: add a new node to the parent node
+                visit(method);
             }
 
             @Override
             public void visitField(PsiField field) {
-                // TODO: add a new node to the parent node
+                visit(field);
             }
         };
 
@@ -90,4 +102,3 @@ class ProjectTreeModelFactory {
         return rootPackages;
     }
 }
-
