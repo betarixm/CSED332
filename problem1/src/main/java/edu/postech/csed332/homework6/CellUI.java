@@ -31,6 +31,11 @@ public class CellUI extends JTextField implements Observer {
             addKeyListener(new KeyListener() {
                 @Override
                 public void keyTyped(KeyEvent e) {
+
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
                     char key = e.getKeyChar();
                     if (('1' <= key) && (key <= '9') && cell.containsPossibility(key - '0')) {
                         cell.setNumber(key - '0');
@@ -42,13 +47,9 @@ public class CellUI extends JTextField implements Observer {
                             cell.setNumber(Integer.parseInt(getText()));
                         }
                     } else {
-                        cell.unsetNumber();
                         setText("");
+                        System.out.println("why?");
                     }
-                }
-
-                @Override
-                public void keyReleased(KeyEvent e) {
 
                 }
 
@@ -58,26 +59,7 @@ public class CellUI extends JTextField implements Observer {
                 }
 
             });
-            getDocument().addDocumentListener(new DocumentListener() {
-                @Override
-                public void insertUpdate(DocumentEvent e) {
-                    cell.setNumber(Integer.parseInt(getText()));
-                }
 
-                @Override
-                public void removeUpdate(DocumentEvent e) {
-                    if (getText().isEmpty()) {
-                        cell.unsetNumber();
-                    } else {
-                        cell.setNumber(Integer.parseInt(getText()));
-                    }
-                }
-
-                @Override
-                public void changedUpdate(DocumentEvent e) {
-
-                }
-            });
         } else {
             setText(cell.getNumber().get().toString());
         }
