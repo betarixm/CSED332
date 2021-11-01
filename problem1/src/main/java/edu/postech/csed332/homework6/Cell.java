@@ -123,10 +123,10 @@ public class Cell extends Subject {
      */
     public void addPossibility(int number) {
         if ((number % 2) == _type.ordinal()) {
-            _possibilities.set(number);
             if (emptyPossibility()) {
                 notifyObservers(new EnabledEvent());
             }
+            _possibilities.set(number);
         }
     }
 
