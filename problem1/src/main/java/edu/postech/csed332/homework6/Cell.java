@@ -17,7 +17,7 @@ public class Cell extends Subject {
 
     Type _type;
     Integer _value;
-    BitSet _possibilities;
+    BitSet _possibilities, _fixedPossibility;
 
 
     //TODO: add private member variables for Board
@@ -30,10 +30,13 @@ public class Cell extends Subject {
     public Cell(@NotNull Type type) {
         this._type = type;
         this._possibilities = new BitSet(10); // 0 is not used, only use 1-9
+        this._fixedPossibility = new BitSet(10);
+
         for (int i = 1; i <= 9; i++) {
             if ((i % 2) == type.ordinal()) {
                 _possibilities.set(i);
             }
+            _fixedPossibility.set(i);
         }
     }
 
@@ -73,6 +76,11 @@ public class Cell extends Subject {
         }
     }
 
+    public void setFixedNumber(int number){
+        _value = number;
+        notifyObservers(new SetFixedNumberEvent(number));
+    }
+
     /**
      * Removes the number of this cell and notifies an UnsetNumberEvent, provided that the cell has a number.
      */
@@ -102,7 +110,7 @@ public class Cell extends Subject {
      */
     @NotNull
     public Boolean containsPossibility(int n) {
-        return _possibilities.get(n);
+        return _fixedPossibility.get(n) && _possibilities.get(n);
     }
 
     /**
@@ -112,7 +120,9 @@ public class Cell extends Subject {
      */
     @NotNull
     public Boolean emptyPossibility() {
-        return _possibilities.isEmpty();
+        BitSet bitSet = (BitSet) _possibilities.clone();
+        bitSet.and(_fixedPossibility);
+        return bitSet.isEmpty();
     }
 
     /**
@@ -144,5 +154,10 @@ public class Cell extends Subject {
             if (emptyPossibility())
                 notifyObservers(new DisabledEvent());
         }
+    }
+
+    public void setFixedPossibility(int number) {
+        if ((_value == null || _value != number))
+            _fixedPossibility.clear(number);
     }
 }

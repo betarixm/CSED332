@@ -51,7 +51,7 @@ public class Board {
                 number = game.getNumbers(i, j).orElse(0);
 
                 if (number > 0) {
-                    cell.setNumber(number);
+                    cell.setFixedNumber(number);
                 }
             }
         }

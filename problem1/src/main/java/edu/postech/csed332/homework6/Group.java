@@ -1,6 +1,7 @@
 package edu.postech.csed332.homework6;
 
 import edu.postech.csed332.homework6.events.Event;
+import edu.postech.csed332.homework6.events.SetFixedNumberEvent;
 import edu.postech.csed332.homework6.events.SetNumberEvent;
 import edu.postech.csed332.homework6.events.UnsetNumberEvent;
 import org.jetbrains.annotations.NotNull;
@@ -72,7 +73,12 @@ public class Group implements Observer {
     @Override
     public void update(Subject caller, Event arg) {
         int number;
-        if (arg instanceof SetNumberEvent) {
+
+        if (arg instanceof SetFixedNumberEvent){
+            number = ((SetFixedNumberEvent)arg).getNumber();
+            for (Cell cell : cellSet)
+                cell.setFixedPossibility(number);
+        } else if (arg instanceof SetNumberEvent) {
             number = ((SetNumberEvent) arg).getNumber();
             for (Cell cell : cellSet)
                 cell.removePossibility(number);
