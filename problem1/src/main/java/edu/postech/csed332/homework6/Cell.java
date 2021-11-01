@@ -77,8 +77,10 @@ public class Cell extends Subject {
      * Removes the number of this cell and notifies an UnsetNumberEvent, provided that the cell has a number.
      */
     public void unsetNumber() {
-        notifyObservers(new UnsetNumberEvent(_value));
-        _value = null;
+        if (_value != null) {
+            notifyObservers(new UnsetNumberEvent(_value));
+            _value = null;
+        }
     }
 
     /**
