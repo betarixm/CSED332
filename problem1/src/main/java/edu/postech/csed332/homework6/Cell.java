@@ -139,7 +139,7 @@ public class Cell extends Subject {
      * @param number the number
      */
     public void removePossibility(int number) {
-        if (_value == null && (number % 2) == _type.ordinal()) {
+        if ((_value == null || _value != number)  && (number % 2) == _type.ordinal()) {
             _possibilities.clear(number);
             if (emptyPossibility())
                 notifyObservers(new DisabledEvent());
