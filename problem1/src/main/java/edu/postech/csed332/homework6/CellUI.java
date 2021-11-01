@@ -5,6 +5,8 @@ import edu.postech.csed332.homework6.events.EnabledEvent;
 import edu.postech.csed332.homework6.events.Event;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
@@ -22,8 +24,28 @@ public class CellUI extends JTextField implements Observer {
         initCellUI(cell);
 
         if (cell.getNumber().isEmpty()) {
-            //TODO: whenever the content is changed, cell.setNumber() or cell.unsetNumber() is accordingly invoked.
-            // You may use an action listener, a key listener, a document listener, etc.
+            getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    cell.setNumber(Integer.parseInt(getText()));
+                }
+
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    if (getText().isEmpty()) {
+                        cell.unsetNumber();
+                    } else {
+                        cell.setNumber(Integer.parseInt(getText()));
+                    }
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+
+                }
+            });
+        } else {
+            setText(cell.getNumber().get().toString());
         }
     }
 
@@ -53,7 +75,11 @@ public class CellUI extends JTextField implements Observer {
      */
     @Override
     public void update(Subject caller, Event arg) {
-        //TODO: implement this
+        if (arg instanceof DisabledEvent) {
+            setDeactivate();
+        } else if (arg instanceof EnabledEvent) {
+            setActivate();
+        }
     }
 
     /**
