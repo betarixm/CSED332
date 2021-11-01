@@ -41,7 +41,6 @@ public class Group implements Observer {
      */
     @NotNull
     Boolean contains(@NotNull Cell cell) {
-
         return cellSet.contains(cell);
     }
 
@@ -55,8 +54,8 @@ public class Group implements Observer {
     public Boolean isAvailable(int number) {
         boolean result = true;
 
-        for(Cell cell : cellSet){
-            if(cell.getNumber().get() == number)
+        for (Cell cell : cellSet) {
+            if (cell.getNumber().get() == number)
                 result = false;
         }
 
@@ -73,14 +72,13 @@ public class Group implements Observer {
     @Override
     public void update(Subject caller, Event arg) {
         int number;
-        if (arg instanceof SetNumberEvent){
-            number =  ((SetNumberEvent)arg).getNumber();
-            for(Cell cell : cellSet)
+        if (arg instanceof SetNumberEvent) {
+            number = ((SetNumberEvent) arg).getNumber();
+            for (Cell cell : cellSet)
                 cell.removePossibility(number);
-        }
-        else {
-            number = ((UnsetNumberEvent)arg).getNumber();
-            for(Cell cell : cellSet)
+        } else if (arg instanceof UnsetNumberEvent) {
+            number = ((UnsetNumberEvent) arg).getNumber();
+            for (Cell cell : cellSet)
                 cell.addPossibility(number);
         }
     }

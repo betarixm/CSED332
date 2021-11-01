@@ -14,10 +14,10 @@ import java.util.Optional;
  */
 public class Cell extends Subject {
     enum Type {EVEN, ODD}
+
     Type _type;
     Integer _value;
     BitSet _possibilities;
-
 
 
     //TODO: add private member variables for Board
@@ -30,9 +30,10 @@ public class Cell extends Subject {
     public Cell(@NotNull Type type) {
         this._type = type;
         this._possibilities = new BitSet(10); // 0 is not used, only use 1-9
-        for(int i=1; i<=9; i++){
-            if((i%2) == type.ordinal())
+        for (int i = 1; i <= 9; i++) {
+            if ((i % 2) == type.ordinal()) {
                 _possibilities.set(i);
+            }
         }
     }
 
@@ -53,7 +54,7 @@ public class Cell extends Subject {
      */
     @NotNull
     public Optional<Integer> getNumber() {
-        if(_value != null)
+        if (_value != null)
             return Optional.of(_value);
         else
             return Optional.empty();
@@ -70,7 +71,6 @@ public class Cell extends Subject {
             _value = number;
             notifyObservers(new SetNumberEvent(number));
         }
-        //TODO : what if we can't set number in this cell?
     }
 
     /**
@@ -100,7 +100,6 @@ public class Cell extends Subject {
      */
     @NotNull
     public Boolean containsPossibility(int n) {
-
         return _possibilities.get(n);
     }
 
@@ -111,7 +110,6 @@ public class Cell extends Subject {
      */
     @NotNull
     public Boolean emptyPossibility() {
-
         return _possibilities.isEmpty();
     }
 
@@ -124,13 +122,12 @@ public class Cell extends Subject {
      * @param number the number
      */
     public void addPossibility(int number) {
-        if ((number%2) == _type.ordinal()){
-            if(emptyPossibility())
-                notifyObservers(new EnabledEvent());
+        if ((number % 2) == _type.ordinal()) {
             _possibilities.set(number);
+            if (emptyPossibility()) {
+                notifyObservers(new EnabledEvent());
+            }
         }
-        //TODO : should we check input number is already used by another cell in the same group?
-        // how? should Cell have groups by attribute?
     }
 
     /*
@@ -142,7 +139,7 @@ public class Cell extends Subject {
     public void removePossibility(int number) {
         if (_value == null && (number % 2) == _type.ordinal()) {
             _possibilities.clear(number);
-            if(emptyPossibility())
+            if (emptyPossibility())
                 notifyObservers(new DisabledEvent());
         }
     }
