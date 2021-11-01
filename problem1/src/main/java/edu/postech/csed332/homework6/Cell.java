@@ -66,8 +66,7 @@ public class Cell extends Subject {
      * @param number the number
      */
     public void setNumber(int number) {
-        if (_value != null && containsPossibility(number))
-        {
+        if (_value == null && containsPossibility(number)) {
             _value = number;
             notifyObservers(new SetNumberEvent(number));
             _possibilities.clear();
