@@ -80,6 +80,13 @@ class ProjectStructureTree extends Tree {
                 if (e.getClickCount() == 2) {
                     // TODO: implement the double-click behavior here
                     // hint: use the navigate method of the classes PsiMethod and PsiField
+                    TreePath path = getSelectionPath();
+                    if (path == null) { return; }
+                    DefaultMutableTreeNode term = (DefaultMutableTreeNode) path.getLastPathComponent();
+
+                    if (term.getUserObject() instanceof PsiMethod || term.getUserObject() instanceof PsiField) {
+                        ((PsiJvmMember) term.getUserObject()).navigate(true);
+                    }
                 }
             }
         });
