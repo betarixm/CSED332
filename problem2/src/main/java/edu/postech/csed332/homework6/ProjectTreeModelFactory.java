@@ -32,37 +32,66 @@ class ProjectTreeModelFactory {
 
         // The visitor to traverse the Java hierarchy and to construct the tree
         final var visitor = new JavaElementVisitor() {
-            MutableTreeNode curParent = root;
+            DefaultMutableTreeNode curParent = root;
 
-            private void visit(PsiElement parent) {
-                MutableTreeNode parentNode = new DefaultMutableTreeNode();
-                parentNode.setUserObject(parent);
-                parentNode.setParent(curParent);
+            @Override
+            public void visitPackage(PsiPackage pack) {
+                DefaultMutableTreeNode parentNode = new DefaultMutableTreeNode(pack.getName());
+                parentNode.setUserObject(pack);
+                curParent.add(parentNode);
 
-                for (PsiElement e : parent.getChildren()) {
+                for (PsiPackage e : pack.getSubPackages()) {
+                    curParent = parentNode;
+                    e.accept(this);
+                }
+
+                for (PsiClass e : pack.getClasses()) {
+                    curParent = parentNode;
+                    e.accept(this);
+                }
+
+                System.out.println();
+            }
+
+            @Override
+            public void visitClass(PsiClass aClass) {
+                DefaultMutableTreeNode parentNode = new DefaultMutableTreeNode();
+                parentNode.setUserObject(aClass);
+                curParent.add(parentNode);
+
+                for (PsiMethod e : aClass.getMethods()) {
+                    curParent = parentNode;
+                    e.accept(this);
+                }
+
+                for (PsiField f : aClass.getFields()) {
+                    curParent = parentNode;
+                    f.accept(this);
+                }
+            }
+
+            @Override
+            public void visitMethod(PsiMethod method) {
+                DefaultMutableTreeNode parentNode = new DefaultMutableTreeNode();
+                parentNode.setUserObject(method);
+                curParent.add(parentNode);
+
+                for (PsiElement e : method.getChildren()) {
                     curParent = parentNode;
                     e.accept(this);
                 }
             }
 
             @Override
-            public void visitPackage(PsiPackage pack) {
-                visit(pack);
-            }
-
-            @Override
-            public void visitClass(PsiClass aClass) {
-                visit(aClass);
-            }
-
-            @Override
-            public void visitMethod(PsiMethod method) {
-                visit(method);
-            }
-
-            @Override
             public void visitField(PsiField field) {
-                visit(field);
+                DefaultMutableTreeNode parentNode = new DefaultMutableTreeNode();
+                parentNode.setUserObject(field);
+                curParent.add(parentNode);
+
+                for (PsiElement e : field.getChildren()) {
+                    curParent = parentNode;
+                    e.accept(this);
+                }
             }
         };
 
