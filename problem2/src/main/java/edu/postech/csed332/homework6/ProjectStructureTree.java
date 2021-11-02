@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.plaf.metal.MetalIconFactory;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -120,8 +121,34 @@ class ProjectStructureTree extends Tree {
      * @param project a project
      * @param target  a target element
      */
+
+    private TreePath findPath(DefaultMutableTreeNode parent, @NotNull PsiElement target){
+
+        if (parent.getUserObject().equals(target)){
+            return new TreePath(parent.getPath());
+        }
+
+        for (int i = 0; i < parent.getChildCount(); i++){
+            DefaultMutableTreeNode child = (DefaultMutableTreeNode) parent.getChildAt(i);
+            TreePath path = findPath(child, target);
+
+            if (path != null){
+                return path;
+            }
+        }
+
+        return null; // below of this node, target doesn't exist.
+    }
+
     private void updateTree(@NotNull Project project, @NotNull PsiElement target) {
-        setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
+        TreeModel model = ProjectTreeModelFactory.createProjectTreeModel(project);
+        setModel(model);
+
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        TreePath path = findPath(root, target);
+
+        setSelectionPath(path);
+        scrollPathToVisible(path);
     }
 
     /**
