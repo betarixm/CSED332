@@ -9,9 +9,13 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalIconFactory;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -44,8 +48,28 @@ class ProjectStructureTree extends Tree {
             @Override
             public void customizeCellRenderer(@NotNull JTree tree, Object value, boolean selected,
                                               boolean expanded, boolean leaf, int row, boolean hasFocus) {
-                // TODO: implement the renderer behavior here
-                // hint: use the setIcon method to assign icons, and the append method to add text
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+                Object userObject = node.getUserObject();
+
+                if (userObject instanceof Project) {
+                    setIcon(projectIcon);
+                    append(((Project) userObject).getName());
+                } else if (userObject instanceof PsiPackage) {
+                    setIcon(packageIcon);
+                    append(Objects.requireNonNull(((PsiPackage) userObject).getName()));
+                } else if (userObject instanceof PsiClass) {
+                    setIcon(classIcon);
+                    append(Objects.requireNonNull(((PsiClass) userObject).getName()));
+                } else if (userObject instanceof PsiMethod) {
+                    setIcon(methodIcon);
+                    append(Objects.requireNonNull(((PsiMethod) userObject).getName()));
+                } else if (userObject instanceof PsiField) {
+                    setIcon(fieldIcon);
+                    append(Objects.requireNonNull(((PsiField) userObject).getName()));
+                } else if (userObject instanceof PsiElement) {
+                    setIcon(defaultIcon);
+                    append(Objects.requireNonNull(((PsiElement) userObject).getText()));
+                }
             }
         });
 
@@ -90,7 +114,7 @@ class ProjectStructureTree extends Tree {
      * @param target  a target element
      */
     private void updateTree(@NotNull Project project, @NotNull PsiElement target) {
-        // TODO: implement this method
+        setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
     }
 
     /**
