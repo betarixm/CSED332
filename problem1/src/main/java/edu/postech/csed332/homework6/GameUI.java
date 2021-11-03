@@ -2,6 +2,7 @@ package edu.postech.csed332.homework6;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 public class GameUI {
     private static final int unitSize = 10;
@@ -40,7 +41,21 @@ public class GameUI {
         CellUI[][] cells = new CellUI[9][9];
         JPanel[][] squares = new JPanel[3][3];
 
-        //TODO: implement this. Create cells and squares, to add them to top, and to define layouts for them.
+        for(int i = 0; i < squares.length; i++) {
+            for(int j = 0; j < squares[i].length; j++){
+                squares[i][j] = new JPanel();
+                squares[i][j].setLayout(new GridLayout(3, 3));
+
+                for(int k = 0; k < 3; k++) {
+                    for(int l = 0; l < 3; l++) {
+                        cells[k + 3 * i][l + 3 * j] = new CellUI(board.getCell(k + 3 * i, l + 3 * j));
+                        squares[i][j].add(cells[k + 3 * i][l + 3 * j]);
+                    }
+                }
+
+                top.add(squares[i][j]);
+            }
+        }
     }
 
 }

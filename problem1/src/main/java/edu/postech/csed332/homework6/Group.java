@@ -1,6 +1,7 @@
 package edu.postech.csed332.homework6;
 
 import edu.postech.csed332.homework6.events.Event;
+import edu.postech.csed332.homework6.events.SetFixedNumberEvent;
 import edu.postech.csed332.homework6.events.SetNumberEvent;
 import edu.postech.csed332.homework6.events.UnsetNumberEvent;
 import org.jetbrains.annotations.NotNull;
@@ -14,12 +15,13 @@ import java.util.Set;
  */
 public class Group implements Observer {
     //TODO: add private member variables for Board
+    Set<Cell> cellSet;
 
     /**
      * Creates an empty group.
      */
     Group() {
-        //TODO: implement this
+        cellSet = new HashSet<>();
     }
 
     /**
@@ -28,7 +30,8 @@ public class Group implements Observer {
      * @param cell a cell to be added
      */
     void addCell(Cell cell) {
-        //TODO: implement this
+        cell.addGroup(this);
+        cellSet.add(cell);
     }
 
     /**
@@ -39,8 +42,7 @@ public class Group implements Observer {
      */
     @NotNull
     Boolean contains(@NotNull Cell cell) {
-        //TODO: implement this
-        return null;
+        return cellSet.contains(cell);
     }
 
     /**
@@ -51,8 +53,14 @@ public class Group implements Observer {
      */
     @NotNull
     public Boolean isAvailable(int number) {
-        //TODO: implement this
-        return null;
+        boolean result = true;
+
+        for (Cell cell : cellSet) {
+            if (cell.getNumber().get() == number)
+                result = false;
+        }
+
+        return result;
     }
 
     /**
@@ -64,6 +72,20 @@ public class Group implements Observer {
      */
     @Override
     public void update(Subject caller, Event arg) {
-        //TODO: implement this
+        int number;
+
+        if (arg instanceof SetFixedNumberEvent){
+            number = ((SetFixedNumberEvent)arg).getNumber();
+            for (Cell cell : cellSet)
+                cell.setFixedPossibility(number);
+        } else if (arg instanceof SetNumberEvent) {
+            number = ((SetNumberEvent) arg).getNumber();
+            for (Cell cell : cellSet)
+                cell.removePossibility(number);
+        } else if (arg instanceof UnsetNumberEvent) {
+            number = ((UnsetNumberEvent) arg).getNumber();
+            for (Cell cell : cellSet)
+                cell.addPossibility(number);
+        }
     }
 }

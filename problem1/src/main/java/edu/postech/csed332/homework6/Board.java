@@ -2,11 +2,17 @@ package edu.postech.csed332.homework6;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * An even-odd Sudoku board
  */
 public class Board {
-    //TODO: add private member variables for Board
+    Cell[][] cells;
+    Group[] rowSet, colSet;
+    Group[] squareSet;
+
 
     /**
      * Creates an even-odd Sudoku board
@@ -14,7 +20,41 @@ public class Board {
      * @param game an initial configuration
      */
     Board(@NotNull GameInstance game) {
-        //TODO: implement this
+        int number;
+        int i, j;
+        cells = new Cell[9][9];
+        rowSet = new Group[9];
+        colSet = new Group[9];
+        squareSet = new Group[9];
+
+        for (i = 0; i < rowSet.length; i++) {
+            rowSet[i] = new Group();
+            colSet[i] = new Group();
+            squareSet[i] = new Group();
+        }
+
+        for (i = 0; i < cells.length; i++) {
+            for (j = 0; j < cells[i].length; j++) {
+                Cell.Type type = game.isEven(i, j) ? Cell.Type.EVEN : Cell.Type.ODD;
+                Cell cell = new Cell(type);
+
+                cells[i][j] = cell;
+                rowSet[i].addCell(cell);
+                colSet[j].addCell(cell);
+                squareSet[(i / 3) * 3 + j / 3].addCell(cell);
+            }
+        }
+
+        for (i = 0; i < cells.length; i++) {
+            for (j = 0; j < cells[i].length; j++) {
+                Cell cell = getCell(i, j);
+                number = game.getNumbers(i, j).orElse(0);
+
+                if (number > 0) {
+                    cell.setFixedNumber(number);
+                }
+            }
+        }
     }
 
     /**
@@ -26,8 +66,7 @@ public class Board {
      */
     @NotNull
     Cell getCell(int i, int j) {
-        //TODO: implement this
-        return null;
+        return cells[i][j];
     }
 
     /**
@@ -38,8 +77,7 @@ public class Board {
      */
     @NotNull
     Group getRowGroup(int i) {
-        //TODO: implement this
-        return null;
+        return rowSet[i];
     }
 
     /**
@@ -50,8 +88,7 @@ public class Board {
      */
     @NotNull
     Group getColGroup(int j) {
-        //TODO: implement this
-        return null;
+        return colSet[j];
     }
 
     /**
@@ -63,7 +100,6 @@ public class Board {
      */
     @NotNull
     Group getSquareGroup(int n, int m) {
-        //TODO: implement this
-        return null;
+        return squareSet[n * 3 + m];
     }
 }

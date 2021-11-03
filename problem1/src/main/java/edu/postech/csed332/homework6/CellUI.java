@@ -5,10 +5,16 @@ import edu.postech.csed332.homework6.events.EnabledEvent;
 import edu.postech.csed332.homework6.events.Event;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.security.Key;
 
 public class CellUI extends JTextField implements Observer {
 
@@ -22,8 +28,34 @@ public class CellUI extends JTextField implements Observer {
         initCellUI(cell);
 
         if (cell.getNumber().isEmpty()) {
-            //TODO: whenever the content is changed, cell.setNumber() or cell.unsetNumber() is accordingly invoked.
-            // You may use an action listener, a key listener, a document listener, etc.
+            addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {}
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    char key = e.getKeyChar();
+                    if (('1' <= key) && (key <= '9') && cell.containsPossibility(key - '0') && cell.getNumber().isEmpty()) {
+                        cell.setNumber(key - '0');
+                    } else if (key == KeyEvent.VK_BACK_SPACE) {
+                        if (getText().isEmpty()) {
+                            cell.unsetNumber();
+                            setText("");
+                        } else {
+                            cell.setNumber(Integer.parseInt(getText()));
+                        }
+                    } else {
+                        setText("");
+                        cell.unsetNumber();
+                    }
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {}
+            });
+
+        } else {
+            setText(cell.getNumber().get().toString());
         }
     }
 
@@ -53,7 +85,11 @@ public class CellUI extends JTextField implements Observer {
      */
     @Override
     public void update(Subject caller, Event arg) {
-        //TODO: implement this
+        if (arg instanceof DisabledEvent) {
+            setDeactivate();
+        } else if (arg instanceof EnabledEvent) {
+            setActivate();
+        }
     }
 
     /**
