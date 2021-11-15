@@ -1,0 +1,19 @@
+plugins {
+    id 'org.jetbrains.intellij' version '1.2.0'
+}
+
+group 'edu.postech.csed332.homework6'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 11
+
+
+repositories {
+    mavenCentral()
+}
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    version '2020.1'
+    plugins = ['com.intellij.java']
+}
+

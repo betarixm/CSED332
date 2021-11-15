@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+group 'edu.postech.csed332'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 16
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains:annotations:22.0.0"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+jar {
+   manifest {
+       attributes(
+               'Class-Path': configurations.compileClasspath.collect { it.getName() }.join(' '),
+               'Main-Class': 'edu.postech.csed332.homework6.GameUI'
+       )
+   }
+}
+
+test {
+    useJUnitPlatform()
+}
